@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(Master VERSION 1.0)
 
-add_executable(Master null.c)
+add_executable(Master Master.c)
 target_sources(Master
     PRIVATE
     "src/Decoder.c")
