@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <signal.h>
 #include <unistd.h>
+#include "Modbus.h"
 
 static uint8_t schedulerCalled = 0u;
 
@@ -11,12 +12,13 @@ int main()
 {
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
+    ModbusInit();
     while(1)
     {
         if(1u == schedulerCalled)
         {
             schedulerCalled = 0u;
-            printf("Scheduler called\n");
+            ModbusReadData(1);
         }
         else
         {
@@ -24,6 +26,7 @@ int main()
         }
         sleep(1);
     }
+    ModbusDeInit();
 
     return 0;
 }
