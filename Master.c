@@ -3,8 +3,11 @@
 #include <signal.h>
 #include <unistd.h>
 #include "Modbus.h"
+#include "Decoder.h"
 
 static uint8_t schedulerCalled = 0u;
+uint16_t rxData[11];
+DecodedData_t decodedData;
 
 static void SchedulerCalled(int signum);
 
@@ -18,7 +21,15 @@ int main()
         if(1u == schedulerCalled)
         {
             schedulerCalled = 0u;
-            ModbusReadData(1);
+            ModbusReadData(1, rxData);
+            DecodeModbus(rxData, &decodedData);
+            printf("%f\n", decodedData.temperature); 
+            printf("%f\n", decodedData.voltage1); 
+            printf("%f\n", decodedData.current1); 
+            printf("%f\n", decodedData.voltage2); 
+            printf("%f\n", decodedData.current2); 
+            printf("%f\n", decodedData.power1); 
+            printf("%f\n", decodedData.power2); 
         }
         else
         {

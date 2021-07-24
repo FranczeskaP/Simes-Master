@@ -65,12 +65,12 @@ void ModbusReadData(uint16_t slaveNum, uint16_t receivedData[NUM_OF_SLAVE_REGIST
 {
     int numOfReadRegs = modbus_read_registers(modbusSensors[slaveNum].slave, 0, NUM_OF_SLAVE_REGISTERS, receivedData);
     if (numOfReadRegs != NUM_OF_SLAVE_REGISTERS) 
-    {// number of read registers is not the one expected
+    {
         fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
     }
     else
     {
-        printf("%i\n", eceivedData[0]);  
+        printf("%i\n", receivedData[0]);  
     }
 }
 

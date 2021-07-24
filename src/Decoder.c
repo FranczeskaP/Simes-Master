@@ -14,7 +14,7 @@ static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static float DecodeCurrent(uint16_t currentBuffer);
 static float DecodePower(uint16_t powerBuffer);
 
-void DecodeModbus(uint16_t rxBuffer[9], DecodedData_t * decodedData)
+void DecodeModbus(uint16_t rxBuffer[11], DecodedData_t * decodedData)
 {
     decodedData->temperature = DecodeTemperature(rxBuffer[0]);
     decodedData->voltage1 = DecodeVoltage(rxBuffer[1], rxBuffer[2]);
@@ -31,7 +31,7 @@ static float DecodeTemperature(uint16_t tempBuffer)
     temperature = (float)(tempBuffer & TEMPERATURE_MASK);
     temperature /= 10;
 
-    if((tempBuffer & SIGN_MASK) == 1u)
+    if((tempBuffer & SIGN_MASK) > 0u)
     {
         temperature = -temperature;
     } 
@@ -48,11 +48,11 @@ static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer)
     decimal /= 100;
     voltage += decimal;
     
-    if((integerBuffer & UNIT_MASK) == 1u)
+    if((integerBuffer & UNIT_MASK) > 0u)
     {
         voltage /= 1000;
     }
-    if((integerBuffer & SIGN_MASK) == 1u)
+    if((integerBuffer & SIGN_MASK) > 0u)
     {
         voltage = -voltage;
     }
@@ -65,11 +65,11 @@ static float DecodeCurrent(uint16_t currentBuffer)
     current = (float)(currentBuffer & CURRENT_MASK);
     current /= 100;
 
-    if((currentBuffer & UNIT_MASK) == 1u)
+    if((currentBuffer & UNIT_MASK) > 0u)
     {
         current /= 1000;
     }  
-    if((currentBuffer & SIGN_MASK) == 1u)
+    if((currentBuffer & SIGN_MASK) > 0u)
     {
         current = -current;
     } 
@@ -82,7 +82,7 @@ static float DecodePower(uint16_t powerBuffer)
     power = (float)(powerBuffer & POWER_MASK);
     power /= 10;
 
-    if((powerBuffer & SIGN_MASK) == 1u)
+    if((powerBuffer & SIGN_MASK) > 0u)
     {
         power = -power;
     } 

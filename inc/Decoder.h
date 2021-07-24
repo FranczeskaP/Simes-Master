@@ -15,6 +15,6 @@ typedef struct
 }DecodedData_t;
 
 
-void DecodeModbus(uint16_t rxBuffer[9], DecodedData_t * decodedData);
+void DecodeModbus(uint16_t rxBuffer[11], DecodedData_t * decodedData);
 
 #endif
