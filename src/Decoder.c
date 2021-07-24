@@ -89,7 +89,3 @@ static float DecodePower(uint16_t powerBuffer)
     return power;
 }
 
-int main()
-{
-    
-}
