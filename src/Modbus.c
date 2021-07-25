@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include <modbus.h>
 #include "Modbus.h"
 
 #define DEVICE_NAME             ("/dev/ttyUSB0")
@@ -10,23 +9,6 @@
 #define PARITY                  ('N')
 #define DATA_BITS               (8u)
 #define STOP_BITS               (1u)
-#define NUM_OF_SLAVE_REGISTERS  (11u)
-
-typedef enum
-{
-    slave0 = 0u,
-    slave1,
-    slave2,
-    slave3,
-    numOfSlaves
-}Slaves;
-
-typedef struct
-{
-    modbus_t *slave;
-    uint16_t receivedData[NUM_OF_SLAVE_REGISTERS];
-}ModbusData_t;
-
 
 ModbusData_t modbusSensors[numOfSlaves];
 
@@ -47,7 +29,8 @@ void ModbusInit(void)
             modbus_free(modbusSensors[i].slave);
             exit(1);
         }
-        modbus_set_slave(modbusSensors[i].slave, i+1);
+        modbusSensors[i].slaveNum = i+1;
+        modbus_set_slave(modbusSensors[i].slave, modbusSensors[i].slaveNum);
     }
 
 }
@@ -61,16 +44,16 @@ void ModbusDeInit(void)
     }
 }
 
-void ModbusReadData(uint16_t slaveNum, uint16_t receivedData[NUM_OF_SLAVE_REGISTERS])
+void ModbusReadData(uint16_t slaveNum)
 {
-    int numOfReadRegs = modbus_read_registers(modbusSensors[slaveNum].slave, 0, NUM_OF_SLAVE_REGISTERS, receivedData);
+    int numOfReadRegs = modbus_read_registers(modbusSensors[slaveNum].slave, 0, NUM_OF_SLAVE_REGISTERS, modbusSensors[slaveNum].receivedData);
     if (numOfReadRegs != NUM_OF_SLAVE_REGISTERS) 
     {
         fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
     }
     else
     {
-        printf("%i\n", receivedData[0]);  
+        printf("%i\n", modbusSensors[slaveNum].receivedData[0]);  
     }
 }
 

@@ -21,8 +21,8 @@ int main()
         if(1u == schedulerCalled)
         {
             schedulerCalled = 0u;
-            ModbusReadData(1, rxData);
-            DecodeModbus(rxData, &decodedData);
+            ModbusReadData(modbusSensors[0].slaveNum);
+            DecodeModbus(modbusSensors[0].receivedData, &decodedData);
             printf("%f\n", decodedData.temperature); 
             printf("%f\n", decodedData.voltage1); 
             printf("%f\n", decodedData.current1); 

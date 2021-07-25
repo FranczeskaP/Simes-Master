@@ -1,11 +1,31 @@
-#ifndef MODBUS_H
-#define MODBUS_H
+#ifndef MY_MODBUS_H
+#define MY_MODBUS_H
 
 #include <stdint.h>
+#include <modbus.h>
+
 #define NUM_OF_SLAVE_REGISTERS  (11u)
 
-void ModbusInit(void);
-void ModbusDeInit(void);
-void ModbusReadData(uint16_t slaveNum, uint16_t receivedData[NUM_OF_SLAVE_REGISTERS]);
+typedef enum
+{
+    slave0 = 0u,
+    slave1,
+    slave2,
+    slave3,
+    numOfSlaves
+}Slaves;
+
+typedef struct
+{
+    uint16_t slaveNum;
+    modbus_t *slave;
+    uint16_t receivedData[NUM_OF_SLAVE_REGISTERS];
+}ModbusData_t;
+
+extern ModbusData_t modbusSensors[numOfSlaves];
+
+extern void ModbusInit(void);
+extern void ModbusDeInit(void);
+extern void ModbusReadData(uint16_t slaveNum);
 
 #endif

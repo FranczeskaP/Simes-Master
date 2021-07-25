@@ -14,7 +14,6 @@ typedef struct
     float power2;
 }DecodedData_t;
 
-
-void DecodeModbus(uint16_t rxBuffer[11], DecodedData_t * decodedData);
+extern void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData);
 
 #endif

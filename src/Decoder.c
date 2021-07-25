@@ -14,7 +14,7 @@ static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static float DecodeCurrent(uint16_t currentBuffer);
 static float DecodePower(uint16_t powerBuffer);
 
-void DecodeModbus(uint16_t rxBuffer[11], DecodedData_t * decodedData)
+void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
 {
     decodedData->temperature = DecodeTemperature(rxBuffer[0]);
     decodedData->voltage1 = DecodeVoltage(rxBuffer[1], rxBuffer[2]);
