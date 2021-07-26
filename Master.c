@@ -33,7 +33,7 @@ int main()
         }
         else
         {
-            printf("Scheduler not called\n");
+            printf(".\n");
         }
         sleep(1);
     }

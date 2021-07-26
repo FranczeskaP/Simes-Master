@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-extern uint16_t InitCurl(void);
+extern uint16_t InitCurl(char *dataToPost);
 extern void PerformPost(char *dataToPost);
 extern void DeInitCurl(void);
 
