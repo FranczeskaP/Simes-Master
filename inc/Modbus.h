@@ -23,6 +23,6 @@ extern ModbusData_t modbusSensors[numOfSlaves];
 
 extern void ModbusInit(void);
 extern void ModbusDeInit(void);
-extern void ModbusReadData(uint16_t slaveNum);
+extern uint8_t ModbusReadData(uint16_t slaveNum);
 
 #endif

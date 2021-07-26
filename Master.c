@@ -16,6 +16,7 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves]);
 
 int main()
 {
+    uint8_t readError = 0u;
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
@@ -25,15 +26,12 @@ int main()
         if(1u == schedulerCalled)
         {
             schedulerCalled = 0u;
-            ModbusReadData(modbusSensors[0].slaveNum);
-            /*modbusSensors[0].receivedData[0] = 42768;
-            modbusSensors[0].receivedData[1] = 16809;
-            modbusSensors[0].receivedData[2] = 0;
-            modbusSensors[0].receivedData[3] = 2563;
-            modbusSensors[0].receivedData[4] = 125;
-            modbusSensors[0].receivedData[5] = 25;
-            */DecodeModbus(modbusSensors[0].receivedData, &decodedData[0]);
-            PerformPost(CreateStringToBePosted(decodedData));
+            readError = ModbusReadData(modbusSensors[0].slaveNum);
+            if(0u == readError)
+            {
+                DecodeModbus(modbusSensors[0].receivedData, &decodedData[0]);
+                PerformPost(CreateStringToBePosted(decodedData));
+            }
         }
         else
         {
