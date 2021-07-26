@@ -14,6 +14,9 @@ ModbusData_t modbusSensors[numOfSlaves];
 
 void ModbusInit(void)
 {
+    struct timeval response_timeout;
+    response_timeout.tv_sec = 0;
+    response_timeout.tv_usec = 100;
     for(uint16_t i = 0u; i < numOfSlaves; i++)
     {
         modbusSensors[i].slave = modbus_new_rtu(DEVICE_NAME, BAUDRATE, PARITY, DATA_BITS, STOP_BITS);
@@ -29,7 +32,8 @@ void ModbusInit(void)
             modbus_free(modbusSensors[i].slave);
             exit(1);
         }
-        modbusSensors[i].slaveNum = i+1;
+        modbusSensors[i].slaveNum = i;
+        modbus_set_response_timeout(modbusSensors[i].slave, response_timeout.tv_sec, response_timeout.tv_usec);
         modbus_set_slave(modbusSensors[i].slave, modbusSensors[i].slaveNum);
     }
 
@@ -50,10 +54,6 @@ void ModbusReadData(uint16_t slaveNum)
     if (numOfReadRegs != NUM_OF_SLAVE_REGISTERS) 
     {
         fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
-    }
-    else
-    {
-        printf("%i\n", modbusSensors[slaveNum].receivedData[0]);  
     }
 }
 

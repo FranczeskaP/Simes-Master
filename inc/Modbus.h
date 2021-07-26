@@ -9,9 +9,6 @@
 typedef enum
 {
     slave0 = 0u,
-    slave1,
-    slave2,
-    slave3,
     numOfSlaves
 }Slaves;
 
