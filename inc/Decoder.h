@@ -5,13 +5,13 @@
 
 typedef struct
 {
-    float temperature;
-    float voltage1;
-    float current1;
-    float voltage2;
-    float current2;
-    float power1;
-    float power2;
+    double temperature;
+    double voltage1;
+    double current1;
+    double voltage2;
+    double current2;
+    double power1;
+    double power2;
 }DecodedData_t;
 
 extern void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData);

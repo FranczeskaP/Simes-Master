@@ -9,10 +9,10 @@
 #define INTEGER_MASK        (0x3FFu)
 #define DECIMAL_MASK        (0x7Fu)
 
-static float DecodeTemperature(uint16_t tempBuffer);
-static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
-static float DecodeCurrent(uint16_t currentBuffer);
-static float DecodePower(uint16_t powerBuffer);
+static double DecodeTemperature(uint16_t tempBuffer);
+static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
+static double DecodeCurrent(uint16_t currentBuffer);
+static double DecodePower(uint16_t powerBuffer);
 
 void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
 {
@@ -25,10 +25,10 @@ void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
     decodedData->power2 = DecodePower(rxBuffer[8]);
 }
 
-static float DecodeTemperature(uint16_t tempBuffer)
+static double DecodeTemperature(uint16_t tempBuffer)
 {
-    float temperature = 0.f;
-    temperature = (float)(tempBuffer & TEMPERATURE_MASK);
+    double temperature = 0.f;
+    temperature = (double)(tempBuffer & TEMPERATURE_MASK);
     temperature /= 10;
 
     if((tempBuffer & SIGN_MASK) > 0u)
@@ -38,13 +38,13 @@ static float DecodeTemperature(uint16_t tempBuffer)
     return temperature;
 }
 
-static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer)
+static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer)
 {
-    float voltage = 0.f;
+    double voltage = 0.f;
     uint16_t integer = 0u;
-    float decimal = 0.f;
-    voltage = (float)(integerBuffer & INTEGER_MASK);
-    decimal = (float)(decimalBuffer & DECIMAL_MASK);
+    double decimal = 0.f;
+    voltage = (double)(integerBuffer & INTEGER_MASK);
+    decimal = (double)(decimalBuffer & DECIMAL_MASK);
     decimal /= 100;
     voltage += decimal;
     
@@ -59,10 +59,10 @@ static float DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer)
     return voltage;
 }
 
-static float DecodeCurrent(uint16_t currentBuffer)
+static double DecodeCurrent(uint16_t currentBuffer)
 {
-    float current = 0.f;
-    current = (float)(currentBuffer & CURRENT_MASK);
+    double current = 0.f;
+    current = (double)(currentBuffer & CURRENT_MASK);
     current /= 100;
 
     if((currentBuffer & UNIT_MASK) > 0u)
@@ -76,10 +76,10 @@ static float DecodeCurrent(uint16_t currentBuffer)
     return current;
 }
 
-static float DecodePower(uint16_t powerBuffer)
+static double DecodePower(uint16_t powerBuffer)
 {
-    float power = 0.f;
-    power = (float)(powerBuffer & POWER_MASK);
+    double power = 0.f;
+    power = (double)(powerBuffer & POWER_MASK);
     power /= 10;
 
     if((powerBuffer & SIGN_MASK) > 0u)
