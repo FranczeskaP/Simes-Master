@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <signal.h>
+#include <string.h>
 #include <unistd.h>
 #include "Modbus.h"
 #include "Decoder.h"
@@ -20,6 +21,7 @@ int main()
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
+    (void)ModbusReadData(modbusSensors[0].slaveNum);
     InitCurl();
     while(1)
     {
@@ -54,7 +56,52 @@ static void SchedulerCalled(int signum)
 
 static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
 {
+    char *slaves[2] = {"sensor1", "sensor2"};
     cJSON *data = cJSON_CreateObject();
+    char sensorNum[2];
+    for(int i = 0; i<2; i++)
+    {
+        
+        cJSON *sensors = cJSON_AddObjectToObject(data, slaves[i]) ;
+       if (sensors == NULL)
+    {
+        goto end;
+    }
+
+    if (cJSON_AddNumberToObject(sensors, "voltage", decodedData[0].voltage1) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "current", decodedData[0].current1) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "power", decodedData[0].power1) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "energy", decodedData[0].power2) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "charge_cycles", decodedData[0].voltage2) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "temperature", decodedData[0].temperature) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "status", 1) == NULL)
+    {
+        goto end;
+    }
+    if (cJSON_AddNumberToObject(sensors, "error", 0) == NULL)
+    {
+        goto end;
+    }
+    }
+    /*
     cJSON *sensor1 = cJSON_AddObjectToObject(data, "sensor1") ;
 
     if (sensor1 == NULL)
@@ -132,7 +179,7 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
     {
         goto end;
     }
-
+    */
 
     char *string = cJSON_Print(data);
     if (string == NULL)
