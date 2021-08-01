@@ -56,131 +56,90 @@ static void SchedulerCalled(int signum)
 
 static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
 {
-    char *slaves[2] = {"sensor1", "sensor2"};
+    char *slaveName[2*numOfSlaves] = {"sensor1", "sensor2"};
+    uint16_t slaveNameNum = 0u;
     cJSON *data = cJSON_CreateObject();
-    char sensorNum[2];
     for(int i = 0; i<2; i++)
     {
-        
-        cJSON *sensors = cJSON_AddObjectToObject(data, slaves[i]) ;
-       if (sensors == NULL)
-    {
-        goto end;
-    }
+        cJSON *sensor0 = cJSON_AddObjectToObject(data, slaveName[slaveNameNum]) ;
+        if (sensor0 == NULL)
+        {
+            goto end;
+        }
+        slaveNameNum++;
 
-    if (cJSON_AddNumberToObject(sensors, "voltage", decodedData[0].voltage1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "current", decodedData[0].current1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "power", decodedData[0].power1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "energy", decodedData[0].power2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "charge_cycles", decodedData[0].voltage2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "temperature", decodedData[0].temperature) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "status", 1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensors, "error", 0) == NULL)
-    {
-        goto end;
-    }
-    }
-    /*
-    cJSON *sensor1 = cJSON_AddObjectToObject(data, "sensor1") ;
+        if (cJSON_AddNumberToObject(sensor0, "voltage", decodedData[i].voltage1) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "current", decodedData[i].current1) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "power", decodedData[i].power1) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "energy", 126) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "charge_cycles", 4) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "temperature", decodedData[i].temperature) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "status", 1) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor0, "error", 0) == NULL)
+        {
+            goto end;
+        }
 
-    if (sensor1 == NULL)
-    {
-        goto end;
+        cJSON *sensor1 = cJSON_AddObjectToObject(data, slaveName[slaveNameNum]) ;
+        if (sensor1 == NULL)
+        {
+            goto end;
+        }
+        slaveNameNum++;
+        if (cJSON_AddNumberToObject(sensor1, "voltage", decodedData[i].voltage2) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "current", decodedData[i].current2) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "power", decodedData[i].power2) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "energy", 25) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "charge_cycles", 5) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "temperature", decodedData[i].temperature) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "status", 1) == NULL)
+        {
+            goto end;
+        }
+        if (cJSON_AddNumberToObject(sensor1, "error", 0) == NULL)
+        {
+            goto end;
+        }
     }
-
-    if (cJSON_AddNumberToObject(sensor1, "voltage", decodedData[0].voltage1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "current", decodedData[0].current1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "power", decodedData[0].power1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "energy", decodedData[0].power2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "charge_cycles", decodedData[0].voltage2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "temperature", decodedData[0].temperature) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "status", 1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor1, "error", 0) == NULL)
-    {
-        goto end;
-    }
-    cJSON *sensor2 = cJSON_AddObjectToObject(data, "sensor2") ;
-    if (sensor2 == NULL)
-    {
-        goto end;
-    }
-
-    if (cJSON_AddNumberToObject(sensor2, "voltage", decodedData[0].voltage1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "current", decodedData[0].current1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "power", decodedData[0].power1) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "energy", decodedData[0].power2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "charge_cycles", decodedData[0].voltage2) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "temperature", decodedData[0].temperature) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "status", 0) == NULL)
-    {
-        goto end;
-    }
-    if (cJSON_AddNumberToObject(sensor2, "error", 1) == NULL)
-    {
-        goto end;
-    }
-    */
-
     char *string = cJSON_Print(data);
     if (string == NULL)
     {
