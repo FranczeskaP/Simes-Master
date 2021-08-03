@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <modbus.h>
 
-#define NUM_OF_SLAVE_REGISTERS  (11u)
+#define NUM_OF_SLAVE_REGISTERS  (18u)
 
 typedef enum
 {

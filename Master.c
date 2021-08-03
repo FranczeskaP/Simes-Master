@@ -80,11 +80,11 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor0, "energy", 126) == NULL)
+        if (cJSON_AddNumberToObject(sensor0, "energy", decodedData[i].energy1) == NULL)
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor0, "charge_cycles", 4) == NULL)
+        if (cJSON_AddNumberToObject(sensor0, "charge_cycles", decodedData[i].electricCharge1) == NULL)
         {
             goto end;
         }
@@ -92,7 +92,7 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor0, "status", 1) == NULL)
+        if (cJSON_AddNumberToObject(sensor0, "status", decodedData[i].efficiency) == NULL)
         {
             goto end;
         }
@@ -119,11 +119,11 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor1, "energy", 25) == NULL)
+        if (cJSON_AddNumberToObject(sensor1, "energy", decodedData[i].energy2) == NULL)
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor1, "charge_cycles", 5) == NULL)
+        if (cJSON_AddNumberToObject(sensor1, "charge_cycles", decodedData[i].electricCharge2) == NULL)
         {
             goto end;
         }
@@ -131,7 +131,7 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensor1, "status", 1) == NULL)
+        if (cJSON_AddNumberToObject(sensor1, "status", decodedData[i].efficiency) == NULL)
         {
             goto end;
         }

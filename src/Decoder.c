@@ -1,18 +1,24 @@
 #include <stdint.h>
 #include "Decoder.h"
 
-#define TEMPERATURE_MASK    (0x3FFFu)
-#define POWER_MASK          (0x3FFFu)
-#define CURRENT_MASK        (0x3FFFu)
-#define SIGN_MASK           (0x8000u)
-#define UNIT_MASK           (0x4000u)
-#define INTEGER_MASK        (0x3FFu)
-#define DECIMAL_MASK        (0x7Fu)
+#define TEMPERATURE_MASK        (0x3FFFu)
+#define POWER_MASK              (0x3FFFu)
+#define CURRENT_MASK            (0x3FFFu)
+#define SIGN_MASK               (0x8000u)
+#define UNIT_MASK               (0x4000u)
+#define INTEGER_MASK            (0x3FFu)
+#define DECIMAL_MASK            (0x7Fu)
+#define PERCENTAGE_MASK         (0x7Fu)
+#define E_Q_INTEGER_MASK        (0xFFF0u)
+#define E_Q_DECIMAL_HIGH_MASK   (0x0Fu)
 
 static double DecodeTemperature(uint16_t tempBuffer);
 static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeCurrent(uint16_t currentBuffer);
 static double DecodePower(uint16_t powerBuffer);
+static uint16_t DecodeEfficiency(uint16_t efficiencyBuffer);
+static double DecodeElectricCharge(uint16_t integerBuffer, uint16_t decimalBuffer);
+static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer);
 
 void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
 {
@@ -23,6 +29,11 @@ void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
     decodedData->current2 = DecodeCurrent(rxBuffer[6]);
     decodedData->power1 = DecodePower(rxBuffer[7]);
     decodedData->power2 = DecodePower(rxBuffer[8]);
+    decodedData->efficiency = DecodeEfficiency(rxBuffer[9]);
+    decodedData->electricCharge1 = DecodeElectricCharge(rxBuffer[10], rxBuffer[11]);
+    decodedData->electricCharge2 = DecodeElectricCharge(rxBuffer[12], rxBuffer[13]);
+    decodedData->energy1 = DecodeEnergy(rxBuffer[14], rxBuffer[15]);
+    decodedData->energy2 = DecodeEnergy(rxBuffer[16], rxBuffer[17]);
 }
 
 static double DecodeTemperature(uint16_t tempBuffer)
@@ -89,3 +100,29 @@ static double DecodePower(uint16_t powerBuffer)
     return power;
 }
 
+static uint16_t DecodeEfficiency(uint16_t efficiencyBuffer)
+{
+    return (efficiencyBuffer & PERCENTAGE_MASK);
+}
+
+static double DecodeElectricCharge(uint16_t integerBuffer, uint16_t decimalBuffer)
+{
+    double electricCharge = 0;
+    uint32_t electricChargeDecimal_u = ((integerBuffer & E_Q_DECIMAL_HIGH_MASK) << 16);
+    electricChargeDecimal_u |= decimalBuffer;
+    double electricChargeDecimal_d = (double)(electricChargeDecimal_u / 1000000);
+    electricCharge = (double)((integerBuffer & E_Q_INTEGER_MASK) >> 4);
+    electricCharge += electricChargeDecimal_d;
+    return electricCharge;
+}
+
+static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer)
+{
+    double energy = 0;
+    uint32_t energyDecimal_u = ((integerBuffer & E_Q_DECIMAL_HIGH_MASK) << 16);
+    energyDecimal_u |= decimalBuffer;
+    double energyDecimal_d = (double)(energyDecimal_u / 1000000);
+    energy = (double)((integerBuffer & E_Q_INTEGER_MASK) >> 4);
+    energy += energyDecimal_d;
+    return energy;
+}
