@@ -7,32 +7,73 @@
 #include "Decoder.h"
 #include "PostData.h"
 #include "cJSON.h"
+#include <time.h>
+
+#define TIME_MS     (2u)
 
 static uint8_t schedulerCalled = 0u;
 uint16_t rxData[11];
 DecodedData_t decodedData[numOfSlaves];
+struct timespec WaitTime = {
+    .tv_sec = 0,
+    .tv_nsec = TIME_MS * 1000000,
+};
 
 static void SchedulerCalled(int signum);
 static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves]);
 
 int main()
 {
-    uint8_t readError = 0u;
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
     (void)ModbusReadData(modbusSensors[0].slaveNum);
+    (void)ModbusReadData(modbusSensors[1].slaveNum);
     InitCurl();
     while(1)
     {
         if(1u == schedulerCalled)
         {
+            uint8_t readError = 0u;
             schedulerCalled = 0u;
-            readError = ModbusReadData(modbusSensors[0].slaveNum);
+            for(uint8_t i = 0u; i < numOfSlaves; i++)
+            {
+                readError |= ModbusReadData(modbusSensors[i].slaveNum);
+                nanosleep(&WaitTime, &WaitTime);
+            }
             if(0u == readError)
             {
-                DecodeModbus(modbusSensors[0].receivedData, &decodedData[0]);
+                for(uint8_t i = 0u; i < numOfSlaves; i++)
+                {
+                    DecodeModbus(modbusSensors[i].receivedData, &decodedData[i]);
+                }
                 PerformPost(CreateStringToBePosted(decodedData));
+                // printf("%f\n", decodedData[0].current1);
+                // printf("%f\n", decodedData[0].current2);
+                // printf("%u\n", decodedData[0].efficiency);
+                // printf("%f\n", decodedData[0].electricCharge1);
+                // printf("%f\n", decodedData[0].electricCharge2);
+                // printf("%f\n", decodedData[0].energy1);
+                // printf("%f\n", decodedData[0].energy2);
+                // printf("%f\n", decodedData[0].power1);
+                // printf("%f\n", decodedData[0].power2);
+                // printf("%f\n", decodedData[0].temperature);
+                // printf("%f\n", decodedData[0].voltage1);
+                // printf("%f\n", decodedData[0].voltage2);
+                // printf("\n");
+                // printf("\n");
+                // printf("%f\n", decodedData[1].current1);
+                // printf("%f\n", decodedData[1].current2);
+                // printf("%u\n", decodedData[1].efficiency);
+                // printf("%f\n", decodedData[1].electricCharge1);
+                // printf("%f\n", decodedData[1].electricCharge2);
+                // printf("%f\n", decodedData[1].energy1);
+                // printf("%f\n", decodedData[1].energy2);
+                // printf("%f\n", decodedData[1].power1);
+                // printf("%f\n", decodedData[1].power2);
+                // printf("%f\n", decodedData[1].temperature);
+                // printf("%f\n", decodedData[1].voltage1);
+                // printf("%f\n", decodedData[1].voltage2);
             }
         }
         else
@@ -56,10 +97,11 @@ static void SchedulerCalled(int signum)
 
 static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
 {
-    char *slaveName[2*numOfSlaves] = {"sensor1", "sensor2"};
+    char *slaveName[2*numOfSlaves] = {"sensor1", "sensor2", "sensor3", "sensor4", "sensor5",
+                                      "sensor6", "sensor7", "sensor8", "sensor9", "sensor10"};
     uint16_t slaveNameNum = 0u;
     cJSON *data = cJSON_CreateObject();
-    for(int i = 0; i<2; i++)
+    for(int i = 0; i<numOfSlaves; i++)
     {
         cJSON *sensor0 = cJSON_AddObjectToObject(data, slaveName[slaveNameNum]) ;
         if (sensor0 == NULL)
