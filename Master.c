@@ -3,11 +3,12 @@
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "Modbus.h"
 #include "Decoder.h"
 #include "PostData.h"
 #include "cJSON.h"
-#include <time.h>
+#include "Mqtt.h"
 
 #define TIME_MS     (2u)
 
@@ -24,6 +25,7 @@ static char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves]);
 
 int main()
 {
+    uint8_t switchToMqtt = 0u;
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
@@ -43,6 +45,7 @@ int main()
             }
             if(0u == readError)
             {
+                switchToMqtt = 0u;
                 for(uint8_t i = 0u; i < numOfSlaves; i++)
                 {
                     DecodeModbus(modbusSensors[i].receivedData, &decodedData[i]);
@@ -75,15 +78,23 @@ int main()
                 // printf("%f\n", decodedData[1].voltage1);
                 // printf("%f\n", decodedData[1].voltage2);
             }
+            else
+            {
+                switchToMqtt++;
+            }
         }
         else
         {
             printf(".\n");
         }
         sleep(1);
+        if(5u == switchToMqtt)
+        {
+            ModbusDeInit();
+            DeInitCurl();
+            SwitchToMqtt();
+        }
     }
-    ModbusDeInit();
-    DeInitCurl();
 
     return 0;
 }

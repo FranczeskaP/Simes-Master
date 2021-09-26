@@ -4,6 +4,7 @@ project(Master VERSION 1.0)
 
 add_executable(Master Master.c)
 pkg_search_module(MODBUS REQUIRED libmodbus)
+pkg_search_module(MQTT REQUIRED libmosquitto)
 
 set(CURL_LIBRARY "-lcurl")
 find_package(CURL REQUIRED)
@@ -13,16 +14,21 @@ target_sources(Master
     "src/Decoder.c"
     "src/Modbus.c"
     "src/PostData.c"
-    "lib/cJSON.c")
+    "lib/cJSON.c"
+    "Mqtt/Mqtt.c"
+    "Mqtt/MqttDefinitions.c")
 
 target_include_directories(Master
     PUBLIC
     ${MODBUS_INCLUDE_DIRS}
     ${CURL_INCLUDE_DIRS}
+    ${MQTT_INCLUDE_DIRS}
     inc
-    lib)
+    lib
+    Mqtt)
 
 target_link_libraries(Master 
     ${MODBUS_LIBRARIES}
+    ${MQTT_LIBRARIES}
     ${CURL_LIBRARIES})
 
