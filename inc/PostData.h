@@ -5,8 +5,8 @@
 #include "Modbus.h"
 
 extern void InitCurl(void);
-
-char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves]);
+extern char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves]);
+extern char * CreateStringToBePostedMqtt(DecodedData_t decodedData[numOfSlaves]);
 extern void PerformPost(char * dataToPost);
 extern void DeInitCurl(void);
 

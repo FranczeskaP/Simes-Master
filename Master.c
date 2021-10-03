@@ -44,38 +44,38 @@ int main()
             if(0u == readError)
             {
                 switchToMqtt = 0u;
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor1", modbusSensors[slave0].receivedData, &decodedData[slave0]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor2", modbusSensors[slave1].receivedData, &decodedData[slave1]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor3", modbusSensors[slave2].receivedData, &decodedData[slave2]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor4", modbusSensors[slave3].receivedData, &decodedData[slave3]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor5", modbusSensors[slave4].receivedData, &decodedData[slave4]);
-                PerformPost(CreateStringToBePosted(decodedData));
-                // printf("%f\n", decodedData[0].current1);
-                // printf("%f\n", decodedData[0].current2);
-                // printf("%u\n", decodedData[0].efficiency);
-                // printf("%f\n", decodedData[0].electricCharge1);
-                // printf("%f\n", decodedData[0].electricCharge2);
-                // printf("%f\n", decodedData[0].energy1);
-                // printf("%f\n", decodedData[0].energy2);
-                // printf("%f\n", decodedData[0].power1);
-                // printf("%f\n", decodedData[0].power2);
-                // printf("%f\n", decodedData[0].temperature);
-                // printf("%f\n", decodedData[0].voltage1);
-                // printf("%f\n", decodedData[0].voltage2);
+                DecodeModbus(DC_FIRST_CHANNEL, "Sensor1", modbusSensors[slave0].receivedData, &DcDecodedData[slave0]);
+                DecodeModbus(DC_FIRST_CHANNEL, "Sensor2", modbusSensors[slave1].receivedData, &DcDecodedData[slave1]);
+                DecodeModbus(DC_FIRST_CHANNEL, "Sensor3", modbusSensors[slave2].receivedData, &DcDecodedData[slave2]);
+                DecodeModbus(DC_FIRST_CHANNEL, "Sensor4", modbusSensors[slave3].receivedData, &DcDecodedData[slave3]);
+                DecodeModbus(DC_FIRST_CHANNEL, "Sensor5", modbusSensors[slave4].receivedData, &DcDecodedData[slave4]);
+                PerformPost(CreateStringToBePostedModbus(DcDecodedData));
+                // printf("%f\n", DcDecodedData[0].current1);
+                // printf("%f\n", DcDecodedData[0].current2);
+                // printf("%u\n", DcDecodedData[0].efficiency);
+                // printf("%f\n", DcDecodedData[0].electricCharge1);
+                // printf("%f\n", DcDecodedData[0].electricCharge2);
+                // printf("%f\n", DcDecodedData[0].energy1);
+                // printf("%f\n", DcDecodedData[0].energy2);
+                // printf("%f\n", DcDecodedData[0].power1);
+                // printf("%f\n", DcDecodedData[0].power2);
+                // printf("%f\n", DcDecodedData[0].temperature);
+                // printf("%f\n", DcDecodedData[0].voltage1);
+                // printf("%f\n", DcDecodedData[0].voltage2);
                 // printf("\n");
                 // printf("\n");
-                // printf("%f\n", decodedData[1].current1);
-                // printf("%f\n", decodedData[1].current2);
-                // printf("%u\n", decodedData[1].efficiency);
-                // printf("%f\n", decodedData[1].electricCharge1);
-                // printf("%f\n", decodedData[1].electricCharge2);
-                // printf("%f\n", decodedData[1].energy1);
-                // printf("%f\n", decodedData[1].energy2);
-                // printf("%f\n", decodedData[1].power1);
-                // printf("%f\n", decodedData[1].power2);
-                // printf("%f\n", decodedData[1].temperature);
-                // printf("%f\n", decodedData[1].voltage1);
-                // printf("%f\n", decodedData[1].voltage2);
+                // printf("%f\n", DcDecodedData[1].current1);
+                // printf("%f\n", DcDecodedData[1].current2);
+                // printf("%u\n", DcDecodedData[1].efficiency);
+                // printf("%f\n", DcDecodedData[1].electricCharge1);
+                // printf("%f\n", DcDecodedData[1].electricCharge2);
+                // printf("%f\n", DcDecodedData[1].energy1);
+                // printf("%f\n", DcDecodedData[1].energy2);
+                // printf("%f\n", DcDecodedData[1].power1);
+                // printf("%f\n", DcDecodedData[1].power2);
+                // printf("%f\n", DcDecodedData[1].temperature);
+                // printf("%f\n", DcDecodedData[1].voltage1);
+                // printf("%f\n", DcDecodedData[1].voltage2);
             }
             else
             {

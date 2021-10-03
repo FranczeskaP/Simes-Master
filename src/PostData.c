@@ -11,13 +11,13 @@ void InitCurl(void)
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
+char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
 {
     uint16_t slaveNameNum = 0u;
     cJSON *data = cJSON_CreateObject();
     for(int i = 0; i<numOfSlaves; i++)
     {
-        cJSON *sensorDc = cJSON_AddObjectToObject(data, decodedData[i].name) ;
+        cJSON *sensorDc = cJSON_AddObjectToObject(data, decodedData[i].name);
         if (sensorDc == NULL)
         {
             goto end;
@@ -36,15 +36,15 @@ char * CreateStringToBePosted(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
+        if (cJSON_AddNumberToObject(sensorDc, "temperature", decodedData[i].temperature) == NULL)
+        {
+            goto end;
+        }
         if (cJSON_AddNumberToObject(sensorDc, "energy", decodedData[i].energy) == NULL)
         {
             goto end;
         }
-        if (cJSON_AddNumberToObject(sensorDc, "charge_cycles", decodedData[i].electricCharge) == NULL)
-        {
-            goto end;
-        }
-        if (cJSON_AddNumberToObject(sensorDc, "temperature", decodedData[i].temperature) == NULL)
+        if (cJSON_AddNumberToObject(sensorDc, "charge", decodedData[i].electricCharge) == NULL)
         {
             goto end;
         }

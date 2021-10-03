@@ -1,5 +1,13 @@
 #ifndef MQTT_DEFINITIONS_H
 #define MQTT_DEFINITIONS_H
+#include <stdbool.h>
+
+typedef struct
+{
+    char *topic;
+    bool topicUpdated;
+	char *data;
+}MqttStruct_t;
 
 typedef enum
 {
@@ -64,11 +72,11 @@ typedef enum
 	TotalNumOfDcSensorTopics
 }DcSensorsTopicsNums;
 
-extern const char * const DcSensor1Topics[TotalNumOfDcSensorTopics];
-extern const char * const DcSensor2Topics[TotalNumOfDcSensorTopics];
-extern const char * const DcSensor3Topics[TotalNumOfDcSensorTopics];
-extern const char * const DcSensor4Topics[TotalNumOfDcSensorTopics];
-extern const char * const DcSensor5Topics[TotalNumOfDcSensorTopics];
-extern const char * const ZamelTopics[TotalNumOfZamelTopics];
+extern MqttStruct_t DcSensor1[TotalNumOfDcSensorTopics];
+extern MqttStruct_t DcSensor2[TotalNumOfDcSensorTopics];
+extern MqttStruct_t DcSensor3[TotalNumOfDcSensorTopics];
+extern MqttStruct_t DcSensor4[TotalNumOfDcSensorTopics];
+extern MqttStruct_t DcSensor5[TotalNumOfDcSensorTopics];
+extern MqttStruct_t Zamel[TotalNumOfZamelTopics];
 
 #endif
