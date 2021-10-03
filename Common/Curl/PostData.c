@@ -2,11 +2,10 @@
 #include <stdint.h>
 #include <string.h>
 #include <curl/curl.h>
-#include "Decoder.h"
+#include "ModbusDecoder.h"
 #include "cJSON.h"
  
 CURL *curl;
-
 
 void InitCurl(void)
 {
@@ -15,7 +14,6 @@ void InitCurl(void)
 
 char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
 {
-    uint16_t slaveNameNum = 0u;
     cJSON *data = cJSON_CreateObject();
     for(int i = 0; i<numOfSlaves; i++)
     {
@@ -24,8 +22,6 @@ char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
         {
             goto end;
         }
-        slaveNameNum++;
-
         if (cJSON_AddNumberToObject(sensorDc, "voltage", decodedData[i].voltage) == NULL)
         {
             goto end;
@@ -59,6 +55,8 @@ char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
             goto end;
         }
     }
+    //todo add Zamel to Posting data
+
     char *string = cJSON_Print(data);
     if (string == NULL)
     {
@@ -69,6 +67,15 @@ end:
     cJSON_Delete(data);
     return string;
 }
+
+
+char * CreateStringToBePostedMqtt(MqttStruct_t dcSensor1[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor2[TotalNumOfDcSensorTopics],
+                                  MqttStruct_t dcSensor3[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor4[TotalNumOfDcSensorTopics],
+                                  MqttStruct_t dcSensor5[TotalNumOfDcSensorTopics], MqttStruct_t zamel[TotalNumOfZamelTopics])
+{
+
+}
+
 
 void PerformPost(char * dataToPost)
 {   

@@ -8,7 +8,6 @@
 #include "ModbusMaster.h"
 #include "Decoder.h"
 #include "PostData.h"
-#include "cJSON.h"
 
 #define TIME_MS     (2u)
 
@@ -19,12 +18,12 @@ struct timespec WaitTime = {
     .tv_nsec = TIME_MS * 1000000,
 };
 
-static void SchedulerCalled(int signum);
+static void ModbusSchedulerCalled(int signum);
 
 void ModbusMainFunction(void)
 {
     uint8_t dataReceiveError = 0u;
-    signal(SIGALRM, SchedulerCalled);
+    signal(SIGALRM, ModbusSchedulerCalled);
     alarm(5);
     ModbusInit();
     (void)ModbusReadData(modbusSensors[0].slaveNum);
@@ -97,7 +96,7 @@ void ModbusMainFunction(void)
 }
 
 
-static void SchedulerCalled(int signum)
+static void ModbusSchedulerCalled(int signum)
 {
     schedulerCalled = 1u;
     alarm(5);

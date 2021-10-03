@@ -13,32 +13,16 @@ static uint8_t NotAllTopicsUpdated = 0u;
 
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc);
 static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
-static void SchedulerCalled(int signum);
+static void MqttSchedulerCalled(int signum);
 static bool CheckIfAllUpdated(void);
+static void MqttInit(void);
 
 void MqttMainFunction(void)
 {
 	bool allSensorsUpdated = FALSE;
-    signal(SIGALRM, SchedulerCalled);
+    signal(SIGALRM, MqttSchedulerCalled);
     alarm(5);
-	int id = 1, id1 = 2;
-	mosquitto_lib_init();
-	master = mosquitto_new("master", TRUE, &id);
-	mosquitto_connect_callback_set(master, OnConnect);
-	mosquitto_message_callback_set(master, OnMessage);
-	if(mosquitto_tls_opts_set(master, 1, "tlsv1.2", NULL))
-	{
-		printf("Error2");
-	}
-	if(mosquitto_tls_set(master, "/etc/mosquitto/ca_certificates/ca1.crt", NULL, NULL, NULL, NULL))
-	{
-		printf("Error.");
-	}
-
-	if(mosquitto_connect(master, IP, 8883, 10))
-	{
-		printf("Could not connect");
-	}
+	MqttInit();
 	while(1)
     {
 		if(MeassagesReceived)
@@ -46,8 +30,7 @@ void MqttMainFunction(void)
 			MeassagesReceived = FALSE;
 			if(CheckIfAllUpdated())
 			{
-				//DecodeMqtt
-				//PostMqtt
+				//todo PostMqtt
 			}
 		}
         sleep(1);
@@ -55,6 +38,7 @@ void MqttMainFunction(void)
 		if(NotAllTopicsUpdated >= 5u)
 		{
 			printf("!!! ERROR !!! Not all sensors send data. !!! ERROR !!!\n");
+			//todo Post with error data ?? 
 		}
     }
 	 
@@ -120,11 +104,11 @@ static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_
 			break;
 		}
 	}
-	printf("New message with topis %s: %s\n", msg->topic, (char*) msg->payload);
+	printf("New message with topic %s: %s\n", msg->topic, (char*) msg->payload);
 }
 
 
-static void SchedulerCalled(int signum)
+static void MqttSchedulerCalled(int signum)
 {
     printf("We're in sceduler\n");
 	MeassagesReceived = TRUE;
@@ -193,5 +177,26 @@ static bool CheckIfAllUpdated(void)
 	{
 		NotAllTopicsUpdated++;
 		return FALSE;
+	}
+}
+
+static void MqttInit(void)
+{
+	int id = 1;
+	mosquitto_lib_init();
+	master = mosquitto_new("master", TRUE, &id);
+	mosquitto_connect_callback_set(master, OnConnect);
+	mosquitto_message_callback_set(master, OnMessage);
+	if(mosquitto_tls_opts_set(master, 1, "tlsv1.2", NULL))
+	{
+		printf("Error2");
+	}
+	if(mosquitto_tls_set(master, "/etc/mosquitto/ca_certificates/ca1.crt", NULL, NULL, NULL, NULL))
+	{
+		printf("Error.");
+	}
+	if(mosquitto_connect(master, IP, 8883, 10))
+	{
+		printf("Could not connect");
 	}
 }
