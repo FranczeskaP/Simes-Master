@@ -8,14 +8,15 @@
 #include "ModbusMaster.h"
 #include "Decoder.h"
 #include "PostData.h"
+#include "MqttMaster.h"
 
-#define TIME_MS     (2u)
+#define TIME_MS_MODBUS     (2u)
 
 static uint8_t schedulerCalled = 0u;
 uint16_t rxData[11];
-struct timespec WaitTime = {
+struct timespec WaitTimeModbus = {
     .tv_sec = 0,
-    .tv_nsec = TIME_MS * 1000000,
+    .tv_nsec = TIME_MS_MODBUS * 1000000,
 };
 
 static void ModbusSchedulerCalled(int signum);
@@ -26,6 +27,7 @@ void ModbusMainFunction(void)
     signal(SIGALRM, ModbusSchedulerCalled);
     alarm(5);
     ModbusInit();
+    MqttInitOnlyZamel();
     (void)ModbusReadData(modbusSensors[0].slaveNum);
     (void)ModbusReadData(modbusSensors[1].slaveNum);
     InitCurl();
@@ -33,12 +35,13 @@ void ModbusMainFunction(void)
     {
         if(1u == schedulerCalled)
         {
+            //todo add zamel handling
             uint8_t readError = 0u;
             schedulerCalled = 0u;
             for(uint8_t i = 0u; i < numOfSlaves; i++)
             {
                 readError |= ModbusReadData(modbusSensors[i].slaveNum);
-                nanosleep(&WaitTime, &WaitTime);
+                nanosleep(&WaitTimeModbus, &WaitTimeModbus);
             }
             if(0u == readError)
             {

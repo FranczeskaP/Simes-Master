@@ -6,11 +6,15 @@
 #include "MqttMaster.h"
 
 #define IP	"192.168.1.103"
+#define CA_FILE_DIR	("/etc/mosquitto/ca_certificates/ca1.crt")
 
 struct mosquitto *master;
 static bool MeassagesReceived = FALSE;
 static uint8_t NotAllTopicsUpdated = 0u;
 
+static void OnConnectOnlyZamel(struct mosquitto *mosq, void *obj, int rc);
+static void OnMessageOnlyZamel(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
+static bool CheckIfAllUpdatedOnlyZamel(void);
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc);
 static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
 static void MqttSchedulerCalled(int signum);
@@ -43,6 +47,76 @@ void MqttMainFunction(void)
     }
 	 
 }
+
+void MqttInitOnlyZamel(void)
+{
+	int id = 1;
+	mosquitto_lib_init();
+	master = mosquitto_new("masterZamel", TRUE, &id);
+	mosquitto_connect_callback_set(master, OnConnectOnlyZamel);
+	mosquitto_message_callback_set(master, OnMessageOnlyZamel);
+	if(mosquitto_tls_opts_set(master, 1, "tlsv1.1", NULL))
+	{
+		printf("Error2");
+	}
+	if(mosquitto_tls_set(master, CA_FILE_DIR, NULL, NULL, NULL, NULL))
+	{
+		printf("Error.");
+	}
+	if(mosquitto_connect(master, IP, 8883, 10))
+	{
+		printf("Could not connect");
+	}
+}
+
+static void OnConnectOnlyZamel(struct mosquitto *mosq, void *obj, int rc)
+{
+	for(int i = 0; i < TotalNumOfZamelTopics; i++)
+	{
+		mosquitto_subscribe(mosq, NULL, Zamel[i].topic, 0);
+	}
+}
+
+static void OnMessageOnlyZamel(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
+{
+	for(int i = 0; i < TotalNumOfZamelTopics; i++)
+	{
+		if(msg->topic == Zamel[i].topic)
+		{
+			Zamel[i].topicUpdated = TRUE;
+			Zamel[i].data = (char*)msg->payload;
+			break;
+		}
+	}
+	printf("New message with topic %s: %s\n", msg->topic, (char*) msg->payload);
+}
+
+
+static bool CheckIfAllUpdatedOnlyZamel(void)
+{
+	bool ZamelUpdated = TRUE;
+	for(int i = 0; i < TotalNumOfZamelTopics; i++)
+	{
+		if(TRUE != Zamel[i].topicUpdated)
+		{
+			ZamelUpdated = FALSE;
+		}
+	}
+	if(ZamelUpdated)
+	{
+		for(int i = 0; i < TotalNumOfZamelTopics; i++)
+		{
+			Zamel[i].topicUpdated = FALSE;
+		}
+		return TRUE;
+	}
+	else
+	{
+		NotAllTopicsUpdated++;
+		return FALSE;
+	}
+}
+
 
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 {
@@ -187,11 +261,11 @@ static void MqttInit(void)
 	master = mosquitto_new("master", TRUE, &id);
 	mosquitto_connect_callback_set(master, OnConnect);
 	mosquitto_message_callback_set(master, OnMessage);
-	if(mosquitto_tls_opts_set(master, 1, "tlsv1.2", NULL))
+	if(mosquitto_tls_opts_set(master, 1, "tlsv1.1", NULL))
 	{
 		printf("Error2");
 	}
-	if(mosquitto_tls_set(master, "/etc/mosquitto/ca_certificates/ca1.crt", NULL, NULL, NULL, NULL))
+	if(mosquitto_tls_set(master, CA_FILE_DIR, NULL, NULL, NULL, NULL))
 	{
 		printf("Error.");
 	}

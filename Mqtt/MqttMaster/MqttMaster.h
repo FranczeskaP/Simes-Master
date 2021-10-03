@@ -3,6 +3,7 @@
 
 #include "MqttDefinitions.h"
 
-void MqttMainFunction(void);
+extern void MqttMainFunction(void);
+extern void MqttInitOnlyZamel(void)
 
 #endif

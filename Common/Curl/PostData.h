@@ -2,7 +2,7 @@
 #define POSTDATA_H
 
 #include <stdint.h>
-#include "Modbus.h"
+#include "Decoder.h"
 #include "MqttDefinitions.h"
 
 extern void InitCurl(void);
