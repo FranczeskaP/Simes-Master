@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "Decoder.h"
-#include "Mqtt.h"
+#include "MqttMaster.h"
 
 #define IP	"192.168.1.103"
 
@@ -11,12 +11,12 @@ struct mosquitto *master;
 static bool MeassagesReceived = FALSE;
 static uint8_t NotAllTopicsUpdated = 0u;
 
-void on_connect(struct mosquitto *mosq, void *obj, int rc);
-void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
+static void OnConnect(struct mosquitto *mosq, void *obj, int rc);
+static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
 static void SchedulerCalled(int signum);
 static bool CheckIfAllUpdated(void);
 
-void SwitchToMqtt(void)
+void MqttMainFunction(void)
 {
 	bool allSensorsUpdated = FALSE;
     signal(SIGALRM, SchedulerCalled);
@@ -24,13 +24,12 @@ void SwitchToMqtt(void)
 	int id = 1, id1 = 2;
 	mosquitto_lib_init();
 	master = mosquitto_new("master", TRUE, &id);
-	mosquitto_connect_callback_set(master, on_connect);
-	mosquitto_message_callback_set(master, on_message);
+	mosquitto_connect_callback_set(master, OnConnect);
+	mosquitto_message_callback_set(master, OnMessage);
 	if(mosquitto_tls_opts_set(master, 1, "tlsv1.2", NULL))
 	{
 		printf("Error2");
 	}
-	int *p = NULL;
 	if(mosquitto_tls_set(master, "/etc/mosquitto/ca_certificates/ca1.crt", NULL, NULL, NULL, NULL))
 	{
 		printf("Error.");
@@ -61,7 +60,7 @@ void SwitchToMqtt(void)
 	 
 }
 
-void on_connect(struct mosquitto *mosq, void *obj, int rc)
+static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{
@@ -77,7 +76,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int rc)
 	}
 }
 
-void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
+static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{

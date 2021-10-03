@@ -15,7 +15,7 @@ target_sources(Master
     "src/Modbus.c"
     "src/PostData.c"
     "lib/cJSON.c"
-    "Mqtt/Mqtt.c"
+    "Mqtt/MqttMaster.c"
     "Mqtt/MqttDefinitions.c")
 
 target_include_directories(Master
