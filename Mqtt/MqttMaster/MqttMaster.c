@@ -54,7 +54,7 @@ void MqttMainFunction(void)
         printf(".\n");
 		if(NotAllTopicsUpdated >= 5u)
 		{
-			printf("!!! ERROR !!! Not all sensors send data. !!! ERROR !!!\n")
+			printf("!!! ERROR !!! Not all sensors send data. !!! ERROR !!!\n");
 		}
     }
 	 

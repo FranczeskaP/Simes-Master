@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <curl/curl.h>
+#include "Decoder.h"
+#include "cJSON.h"
  
 CURL *curl;
 

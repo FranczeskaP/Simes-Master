@@ -11,21 +11,25 @@ find_package(CURL REQUIRED)
 
 target_sources(Master
     PRIVATE
-    "src/Decoder.c"
-    "src/Modbus.c"
-    "src/PostData.c"
-    "lib/cJSON.c"
-    "Mqtt/MqttMaster.c"
-    "Mqtt/MqttDefinitions.c")
+    "Modbus/Decoder/Decoder.c"
+    "Modbus/ModbusMaster/Modbus.c"
+    "Modbus/ModbusMaster/ModbusMaster.c"
+    "Common/Curl/PostData.c"
+    "Common/Json/cJSON.c"
+    "Mqtt/MqttMaster/MqttMaster.c"
+    "Mqtt/MqttDefinitions/MqttDefinitions.c")
 
 target_include_directories(Master
     PUBLIC
     ${MODBUS_INCLUDE_DIRS}
     ${CURL_INCLUDE_DIRS}
     ${MQTT_INCLUDE_DIRS}
-    inc
-    lib
-    Mqtt)
+    Modbus/Decoder
+    Modbus/ModbusMaster
+    Common/Curl
+    Common/Json
+    Mqtt/MqttMaster
+    Mqtt/MqttDefinitions)
 
 target_link_libraries(Master 
     ${MODBUS_LIBRARIES}

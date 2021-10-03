@@ -23,7 +23,7 @@ static void SchedulerCalled(int signum);
 
 void ModbusMainFunction(void)
 {
-    uint8_t switchToMqtt = 0u;
+    uint8_t dataReceiveError = 0u;
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
@@ -43,7 +43,7 @@ void ModbusMainFunction(void)
             }
             if(0u == readError)
             {
-                switchToMqtt = 0u;
+                dataReceiveError = 0u;
                 DecodeModbus(DC_FIRST_CHANNEL, "Sensor1", modbusSensors[slave0].receivedData, &DcDecodedData[slave0]);
                 DecodeModbus(DC_FIRST_CHANNEL, "Sensor2", modbusSensors[slave1].receivedData, &DcDecodedData[slave1]);
                 DecodeModbus(DC_FIRST_CHANNEL, "Sensor3", modbusSensors[slave2].receivedData, &DcDecodedData[slave2]);
@@ -79,7 +79,7 @@ void ModbusMainFunction(void)
             }
             else
             {
-                switchToMqtt++;
+                dataReceiveError++;
             }
         }
         else
@@ -87,11 +87,11 @@ void ModbusMainFunction(void)
             printf(".\n");
         }
         sleep(1);
-        if(5u == switchToMqtt)
+        if(5u == dataReceiveError)
         {
             ModbusDeInit();
             DeInitCurl();
-            SwitchToMqtt();
+            break;
         }
     }
 }
