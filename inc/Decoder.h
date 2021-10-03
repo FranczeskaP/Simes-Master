@@ -2,23 +2,25 @@
 #define DECODER_H
 
 #include <stdint.h>
+#include "Modbus.h"
+
+#define DC_FIRST_CHANNEL           (1u)
+#define DC_SECOND_CHANNEL          (2u)
 
 typedef struct
 {
+    char *name;
     double temperature;
-    double voltage1;
-    double current1;
-    double voltage2;
-    double current2;
-    double power1;
-    double power2;
+    double voltage;
+    double current;
+    double power;
     uint16_t efficiency;
-    double electricCharge1;
-    double electricCharge2;
-    double energy1;
-    double energy2;
+    double electricCharge;
+    double energy;
 }DecodedData_t;
 
-extern void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData);
+extern DecodedData_t decodedData[numOfSlaves];
+
+extern void DecodeModbus(uint8_t channelUsed, char* sensorName, uint16_t *rxBuffer, DecodedData_t * decodedData);
 
 #endif

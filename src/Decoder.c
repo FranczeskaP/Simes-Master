@@ -12,6 +12,8 @@
 #define E_Q_INTEGER_MASK        (0xFFF0u)
 #define E_Q_DECIMAL_HIGH_MASK   (0x0Fu)
 
+DecodedData_t decodedData[numOfSlaves];
+
 static double DecodeTemperature(uint16_t tempBuffer);
 static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeCurrent(uint16_t currentBuffer);
@@ -20,20 +22,27 @@ static uint16_t DecodeEfficiency(uint16_t efficiencyBuffer);
 static double DecodeElectricCharge(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer);
 
-void DecodeModbus(uint16_t *rxBuffer, DecodedData_t * decodedData)
+void DecodeModbus(uint8_t channelUsed, char* sensorName, uint16_t *rxBuffer, DecodedData_t * decodedData)
 {
+    decodedData->name = sensorName;
     decodedData->temperature = DecodeTemperature(rxBuffer[0]);
-    decodedData->voltage1 = DecodeVoltage(rxBuffer[1], rxBuffer[2]);
-    decodedData->current1 = DecodeCurrent(rxBuffer[3]);
-    decodedData->voltage2 = DecodeVoltage(rxBuffer[4], rxBuffer[5]);
-    decodedData->current2 = DecodeCurrent(rxBuffer[6]);
-    decodedData->power1 = DecodePower(rxBuffer[7]);
-    decodedData->power2 = DecodePower(rxBuffer[8]);
     decodedData->efficiency = DecodeEfficiency(rxBuffer[9]);
-    decodedData->electricCharge1 = DecodeElectricCharge(rxBuffer[10], rxBuffer[11]);
-    decodedData->electricCharge2 = DecodeElectricCharge(rxBuffer[12], rxBuffer[13]);
-    decodedData->energy1 = DecodeEnergy(rxBuffer[14], rxBuffer[15]);
-    decodedData->energy2 = DecodeEnergy(rxBuffer[16], rxBuffer[17]);
+    if(DC_FIRST_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = DecodeVoltage(rxBuffer[1], rxBuffer[2]);
+        decodedData->current = DecodeCurrent(rxBuffer[3]);
+        decodedData->power = DecodePower(rxBuffer[7]);
+        decodedData->electricCharge = DecodeElectricCharge(rxBuffer[10], rxBuffer[11]);
+        decodedData->energy = DecodeEnergy(rxBuffer[14], rxBuffer[15]);
+    }
+    else if(DC_SECOND_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = DecodeVoltage(rxBuffer[4], rxBuffer[5]);
+        decodedData->current = DecodeCurrent(rxBuffer[6]);
+        decodedData->power = DecodePower(rxBuffer[8]);
+        decodedData->electricCharge = DecodeElectricCharge(rxBuffer[12], rxBuffer[13]);
+        decodedData->energy = DecodeEnergy(rxBuffer[16], rxBuffer[17]);
+    }
 }
 
 static double DecodeTemperature(uint16_t tempBuffer)
