@@ -5,10 +5,10 @@
 #include <unistd.h>
 #include <time.h>
 #include "Modbus.h"
+#include "ModbusMaster.h"
 #include "Decoder.h"
 #include "PostData.h"
 #include "cJSON.h"
-#include "Mqtt.h"
 
 #define TIME_MS     (2u)
 
@@ -21,7 +21,7 @@ struct timespec WaitTime = {
 
 static void SchedulerCalled(int signum);
 
-int main()
+void ModbusMainFunction(void)
 {
     uint8_t switchToMqtt = 0u;
     signal(SIGALRM, SchedulerCalled);
@@ -94,8 +94,6 @@ int main()
             SwitchToMqtt();
         }
     }
-
-    return 0;
 }
 
 
