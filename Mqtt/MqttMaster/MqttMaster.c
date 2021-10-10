@@ -12,9 +12,6 @@ struct mosquitto *master;
 static bool MeassagesReceived = FALSE;
 static uint8_t NotAllTopicsUpdated = 0u;
 
-static void OnConnectOnlyZamel(struct mosquitto *mosq, void *obj, int rc);
-static void OnMessageOnlyZamel(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
-static bool CheckIfAllUpdatedOnlyZamel(void);
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc);
 static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
 static void MqttSchedulerCalled(int signum);
@@ -48,76 +45,6 @@ void MqttMainFunction(void)
 	 
 }
 
-void MqttInitOnlyZamel(void)
-{
-	int id = 1;
-	mosquitto_lib_init();
-	master = mosquitto_new("masterZamel", TRUE, &id);
-	mosquitto_connect_callback_set(master, OnConnectOnlyZamel);
-	mosquitto_message_callback_set(master, OnMessageOnlyZamel);
-	if(mosquitto_tls_opts_set(master, 1, "tlsv1.1", NULL))
-	{
-		printf("Error2");
-	}
-	if(mosquitto_tls_set(master, CA_FILE_DIR, NULL, NULL, NULL, NULL))
-	{
-		printf("Error.");
-	}
-	if(mosquitto_connect(master, IP, 8883, 10))
-	{
-		printf("Could not connect");
-	}
-}
-
-static void OnConnectOnlyZamel(struct mosquitto *mosq, void *obj, int rc)
-{
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		mosquitto_subscribe(mosq, NULL, Zamel[i].topic, 0);
-	}
-}
-
-static void OnMessageOnlyZamel(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg)
-{
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		if(msg->topic == Zamel[i].topic)
-		{
-			Zamel[i].topicUpdated = TRUE;
-			Zamel[i].data = (char*)msg->payload;
-			break;
-		}
-	}
-	printf("New message with topic %s: %s\n", msg->topic, (char*) msg->payload);
-}
-
-
-static bool CheckIfAllUpdatedOnlyZamel(void)
-{
-	bool ZamelUpdated = TRUE;
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		if(TRUE != Zamel[i].topicUpdated)
-		{
-			ZamelUpdated = FALSE;
-		}
-	}
-	if(ZamelUpdated)
-	{
-		for(int i = 0; i < TotalNumOfZamelTopics; i++)
-		{
-			Zamel[i].topicUpdated = FALSE;
-		}
-		return TRUE;
-	}
-	else
-	{
-		NotAllTopicsUpdated++;
-		return FALSE;
-	}
-}
-
-
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
@@ -127,10 +54,6 @@ static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 		mosquitto_subscribe(mosq, NULL, DcSensor3[i].topic, 0);
 		mosquitto_subscribe(mosq, NULL, DcSensor4[i].topic, 0);
 		mosquitto_subscribe(mosq, NULL, DcSensor5[i].topic, 0);
-	}
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		mosquitto_subscribe(mosq, NULL, Zamel[i].topic, 0);
 	}
 }
 
@@ -169,15 +92,6 @@ static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_
 			break;
 		}
 	}
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		if(msg->topic == Zamel[i].topic)
-		{
-			Zamel[i].topicUpdated = TRUE;
-			Zamel[i].data = (char*)msg->payload;
-			break;
-		}
-	}
 	printf("New message with topic %s: %s\n", msg->topic, (char*) msg->payload);
 }
 
@@ -199,7 +113,6 @@ static bool CheckIfAllUpdated(void)
 	bool DcSensor3Updated = TRUE;
 	bool DcSensor4Updated = TRUE;
 	bool DcSensor5Updated = TRUE;
-	bool ZamelUpdated = TRUE;
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{
 		if(TRUE != DcSensor1[i].topicUpdated)
@@ -223,14 +136,7 @@ static bool CheckIfAllUpdated(void)
 			DcSensor5Updated = FALSE;
 		}
 	}
-	for(int i = 0; i < TotalNumOfZamelTopics; i++)
-	{
-		if(TRUE != Zamel[i].topicUpdated)
-		{
-			ZamelUpdated = FALSE;
-		}
-	}
-	if((TRUE == ZamelUpdated) && (TRUE == DcSensor1Updated) && (TRUE == DcSensor2Updated) && 
+	if((TRUE == DcSensor1Updated) && (TRUE == DcSensor2Updated) && 
 	   (TRUE == DcSensor3Updated) && (TRUE == DcSensor4Updated) && (TRUE == DcSensor5Updated))
 	{
 		for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
@@ -240,10 +146,6 @@ static bool CheckIfAllUpdated(void)
 			DcSensor3[i].topicUpdated = FALSE;
 			DcSensor4[i].topicUpdated = FALSE;
 			DcSensor5[i].topicUpdated = FALSE;
-		}
-		for(int i = 0; i < TotalNumOfZamelTopics; i++)
-		{
-			Zamel[i].topicUpdated = FALSE;
 		}
 		return TRUE;
 	}

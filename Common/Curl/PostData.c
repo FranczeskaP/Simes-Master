@@ -71,7 +71,7 @@ end:
 
 char * CreateStringToBePostedMqtt(MqttStruct_t dcSensor1[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor2[TotalNumOfDcSensorTopics],
                                   MqttStruct_t dcSensor3[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor4[TotalNumOfDcSensorTopics],
-                                  MqttStruct_t dcSensor5[TotalNumOfDcSensorTopics], MqttStruct_t zamel[TotalNumOfZamelTopics])
+                                  MqttStruct_t dcSensor5[TotalNumOfDcSensorTopics])
 {
 
 }

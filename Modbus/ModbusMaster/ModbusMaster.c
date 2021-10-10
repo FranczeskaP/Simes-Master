@@ -27,7 +27,6 @@ void ModbusMainFunction(void)
     signal(SIGALRM, ModbusSchedulerCalled);
     alarm(5);
     ModbusInit();
-    MqttInitOnlyZamel();
     (void)ModbusReadData(modbusSensors[0].slaveNum);
     (void)ModbusReadData(modbusSensors[1].slaveNum);
     InitCurl();
