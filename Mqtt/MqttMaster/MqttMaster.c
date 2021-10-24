@@ -49,11 +49,22 @@ static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{
-		mosquitto_subscribe(mosq, NULL, DcSensor1[i].topic, 0);
-		mosquitto_subscribe(mosq, NULL, DcSensor2[i].topic, 0);
-		mosquitto_subscribe(mosq, NULL, DcSensor3[i].topic, 0);
-		mosquitto_subscribe(mosq, NULL, DcSensor4[i].topic, 0);
-		mosquitto_subscribe(mosq, NULL, DcSensor5[i].topic, 0);
+		if(sensorid1.communicaion = mqtt)
+    	{
+			mosquitto_subscribe(mosq, NULL, DcSensor1[i].topic, 0);
+    	}
+    	if(sensorid2.communicaion = mqtt)
+		{
+			mosquitto_subscribe(mosq, NULL, DcSensor2[i].topic, 0);
+	    }
+    	if(sensorid3.communicaion = mqtt)
+    	{	
+			mosquitto_subscribe(mosq, NULL, DcSensor3[i].topic, 0);
+    	}
+    	if(sensorid4.communicaion = mqtt)
+    	{
+			mosquitto_subscribe(mosq, NULL, DcSensor4[i].topic, 0);
+    	}
 	}
 }
 

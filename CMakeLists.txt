@@ -16,6 +16,7 @@ target_sources(Master
     "Modbus/ModbusMaster/ModbusMaster.c"
     "Common/Curl/PostData.c"
     "Common/Json/cJSON.c"
+    "Common/CsvParser/csvparser.c"
     "Mqtt/MqttMaster/MqttMaster.c"
     "Mqtt/MqttDefinitions/MqttDefinitions.c")
 
@@ -28,6 +29,7 @@ target_include_directories(Master
     Modbus/ModbusMaster
     Common/Curl
     Common/Json
+    Common/CsvParser
     Mqtt/MqttMaster
     Mqtt/MqttDefinitions)
 

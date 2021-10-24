@@ -60,3 +60,23 @@ uint8_t ModbusReadData(uint16_t slaveNum)
     return error;
 }
 
+ModubsRead()
+{
+    if(sensorid1.communicaion = modbus)
+    {
+        ModbusReadData(1);
+    }
+    if(sensorid2.communicaion = modbus)
+    {
+        ModbusReadData(2);
+    }
+    if(sensorid3.communicaion = modbus)
+    {
+        ModbusReadData(3);
+    }
+    if(sensorid4.communicaion = modbus)
+    {
+        ModbusReadData(4);
+    }
+}
+
