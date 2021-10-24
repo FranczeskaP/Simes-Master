@@ -12,7 +12,6 @@ typedef enum
     slave1 = 1u,
     slave2 = 2u,
     slave3 = 3u,
-    slave4 = 4u,
     numOfSlaves
 }Slaves;
 
@@ -27,6 +26,6 @@ extern ModbusData_t modbusSensors[numOfSlaves];
 
 extern void ModbusInit(void);
 extern void ModbusDeInit(void);
-extern uint8_t ModbusReadData(uint16_t slaveNum);
+extern uint8_t ModubsReadDcData(void);
 
 #endif

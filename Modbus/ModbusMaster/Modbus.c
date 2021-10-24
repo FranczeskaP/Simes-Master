@@ -11,6 +11,7 @@
 #define STOP_BITS               (1u)
 
 ModbusData_t modbusSensors[numOfSlaves];
+static uint8_t ModbusReadData(uint16_t slaveNum, uint16_t address, uint16_t numOfRegisters);
 
 void ModbusInit(void)
 {
@@ -48,35 +49,36 @@ void ModbusDeInit(void)
     }
 }
 
-uint8_t ModbusReadData(uint16_t slaveNum)
+uint8_t ModubsReadDcData(void)
 {
     uint8_t error = 0u;
-    int numOfReadRegs = modbus_read_input_registers(modbusSensors[slaveNum-1].slave, 0, NUM_OF_SLAVE_REGISTERS, modbusSensors[slaveNum-1].receivedData);
-    if (numOfReadRegs != NUM_OF_SLAVE_REGISTERS) 
+    if(sensorid1.communicaion = modbus)
+    {
+        error |= ModbusReadData(1, 0u, NUM_OF_SLAVE_REGISTERS);
+    }
+    if(sensorid2.communicaion = modbus)
+    {
+        error |= ModbusReadData(2, 0u, NUM_OF_SLAVE_REGISTERS);
+    }
+    if(sensorid3.communicaion = modbus)
+    {
+        error |= ModbusReadData(3, 0u, NUM_OF_SLAVE_REGISTERS);
+    }
+    if(sensorid4.communicaion = modbus)
+    {
+        error |= ModbusReadData(4, 0u, NUM_OF_SLAVE_REGISTERS);
+    }
+    return error;
+}
+
+static uint8_t ModbusReadData(uint16_t slaveNum, uint16_t address, uint16_t numOfRegisters)
+{
+    uint8_t error = 0u;
+    int numOfReadRegs = modbus_read_input_registers(modbusSensors[slaveNum-1].slave, address, numOfRegisters, modbusSensors[slaveNum-1].receivedData);
+    if (numOfReadRegs != numOfRegisters) 
     {
         error = 1u;
         fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
     }
     return error;
 }
-
-ModubsRead()
-{
-    if(sensorid1.communicaion = modbus)
-    {
-        ModbusReadData(1);
-    }
-    if(sensorid2.communicaion = modbus)
-    {
-        ModbusReadData(2);
-    }
-    if(sensorid3.communicaion = modbus)
-    {
-        ModbusReadData(3);
-    }
-    if(sensorid4.communicaion = modbus)
-    {
-        ModbusReadData(4);
-    }
-}
-
