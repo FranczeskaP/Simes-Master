@@ -1,9 +1,10 @@
-#include "ModbusMaster.h"
-#include "MqttMaster.h"
+//#include "ModbusMaster.h"
+//#include "MqttMaster.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "csvparser.h"
 
 #define MAX_NUM_OF_SENSORS  5u
@@ -62,41 +63,43 @@ static void GetConfigurationData(void)
             break;
         }
         const char **rowFields = CsvParser_getFields(row);
-        configuration[i].SensorId = rowFields[0];
-        configuration[i].SensorName = rowFields[1];
-        configuration[i].ChannelsUsed = rowFields[2];
-        configuration[i].CommunicationMetod = rowFields[3];
+        strcpy(configuration[i].SensorId, rowFields[0]);
+        strcpy(configuration[i].SensorName, rowFields[1]);
+        strcpy(configuration[i].ChannelsUsed, rowFields[2]);
+        strcpy(configuration[i].CommunicationMetod, rowFields[3]);
+        puts(configuration[i].SensorId);
+        printf("%s\n", configuration[i].SensorName);
+        printf("%s\n", configuration[i].ChannelsUsed);
+        printf("%s\n", configuration[i].CommunicationMetod);
         CsvParser_destroy_row(row);
         i++;
     }
     CsvParser_destroy(csvparser);
-	
-    return 0;
 }
 
 static void ProcessConfigData(void)
 {
     for(uint8_t i = 0u; i < MAX_NUM_OF_SENSORS; i++)
     {
-        uint8_t id = (uint8_t)atoi(configuration[i].SensorId);
+        int id = atoi(configuration[i].SensorId);
         configurationData[id - 1].used = true;
         configurationData[id - 1].id = id;
-        if(configuration[i].ChannelsUsed == "First")
+        if(0 == strcmp(configuration[i].ChannelsUsed, "First"))
         {
             configurationData[id - 1].channel1Used = true;
             configurationData[id - 1].channel1Name = configuration[i].SensorName;
         }
-        else if(configuration[i].ChannelsUsed == "Second")
+        else if(0 == strcmp(configuration[i].ChannelsUsed, "Second"))
         {
             configurationData[id - 1].channel2Used = true;
             configurationData[id - 1].channel2Name = configuration[i].SensorName;
         }
 
-        if(configuration[i].CommunicationMetod == "Modbus")
+        if(0 == strcmp(configuration[i].CommunicationMetod, "Modbus"))
         {
             configurationData[id - 1].communicationProtocol = Modbus;
         }
-        else if(configuration[i].CommunicationMetod == "Mqtt")
+        else if(0 == strcmp(configuration[i].CommunicationMetod,  "Mqtt"))
         {
             configurationData[id - 1].communicationProtocol = Mqtt;
         }
@@ -105,13 +108,13 @@ static void ProcessConfigData(void)
 
     for(int i = 0; i < MAX_NUM_OF_SENSORS; i++)
     {
-        printf("Used: %B\n", configurationData[i].used);
-        printf("Channel1used: %B\n", configurationData[i].channel1Used);
-        printf("Channel2used: %B\n", configurationData[i].channel2Used);
+        printf("Id: %i\n", configurationData[i].id);
+        printf("Used: %s\n", configurationData[i].used ? "true" : "false");
+        printf("Channel1used: %s\n", configurationData[i].channel1Used ? "true" : "false");
+        printf("Channel2used: %s\n", configurationData[i].channel2Used ? "true" : "false");
         printf("Channel1Name: %s\n", configurationData[i].channel1Name);
         printf("Channel2Name: %s\n", configurationData[i].channel2Name);
-        printf("ComProt: %s\n", configurationData[i].communicationProtocol);
-        printf("Id: %i\n", configurationData[i].id);
+        printf("ComProt: %i\n", configurationData[i].communicationProtocol);
     }
 
 }
@@ -124,8 +127,12 @@ static void InitConfigData(void)
         configurationData[i].id = 0u;
         configurationData[i].channel1Used = false;
         configurationData[i].channel2Used = false;
-        configurationData[i].channel1Name = "";
-        configurationData[i].channel2Name = "";
+        configurationData[i].channel1Name = malloc(64 * sizeof(char));
+        configurationData[i].channel2Name = malloc(64 * sizeof(char));
         configurationData[i].communicationProtocol = None;
+        configuration[i].SensorId = malloc(64 * sizeof(char));
+        configuration[i].SensorName = malloc(64 * sizeof(char));
+        configuration[i].ChannelsUsed = malloc(64 * sizeof(char));
+        configuration[i].CommunicationMetod = malloc(64 * sizeof(char));
     }
 }
