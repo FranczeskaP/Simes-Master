@@ -3,3 +3,4 @@ SensorId,SensorName,ChannelsUsed,CommunicationMetod
 1,Sensor2,Second,Modbus
 2,Sensor3,First,Mqtt
 3,Sensor4,Second,Modbus
+4,Sensor5,Ac,Modbus

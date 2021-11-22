@@ -12,10 +12,10 @@ void InitCurl(void)
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
+char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfDcSlaves])
 {
     cJSON *data = cJSON_CreateObject();
-    for(int i = 0; i<numOfSlaves; i++)
+    for(int i = 0; i<numOfDcSlaves; i++)
     {
         cJSON *sensorDc = cJSON_AddObjectToObject(data, decodedData[i].name);
         if (sensorDc == NULL)
@@ -66,14 +66,6 @@ char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfSlaves])
 end:
     cJSON_Delete(data);
     return string;
-}
-
-
-char * CreateStringToBePostedMqtt(MqttStruct_t dcSensor1[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor2[TotalNumOfDcSensorTopics],
-                                  MqttStruct_t dcSensor3[TotalNumOfDcSensorTopics], MqttStruct_t dcSensor4[TotalNumOfDcSensorTopics],
-                                  MqttStruct_t dcSensor5[TotalNumOfDcSensorTopics])
-{
-
 }
 
 

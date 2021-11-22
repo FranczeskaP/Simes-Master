@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include <modbus.h>
 
-#define NUM_OF_SLAVE_REGISTERS  (18u)
+#define NUM_OF_DC_REGISTERS  (18u)
+#define NUM_OF_AC_REGISTERS  (18u)
 
 typedef enum
 {
@@ -12,20 +13,34 @@ typedef enum
     slave1 = 1u,
     slave2 = 2u,
     slave3 = 3u,
-    numOfSlaves
-}Slaves;
+    numOfDcSlaves
+}DcSlaves;
 
 typedef struct
 {
     uint16_t slaveNum;
     modbus_t *slave;
-    uint16_t receivedData[NUM_OF_SLAVE_REGISTERS];
+    uint16_t receivedData[NUM_OF_DC_REGISTERS];
+}ModbusDataDc_t;
+
+typedef struct
+{
+    uint16_t slaveNum;
+    modbus_t *slave;
+    uint16_t receivedData[NUM_OF_AC_REGISTERS];
+}ModbusDataAc_t;
+
+typedef struct 
+{
+    ModbusDataDc_t dcSensors[numOfDcSlaves];
+    ModbusDataAc_t acSensor;
 }ModbusData_t;
 
-extern ModbusData_t modbusSensors[numOfSlaves];
+extern ModbusData_t modbusSensors;
+extern ModbusDataDc_t modbusDcSensors[numOfDcSlaves];
 
 extern void ModbusInit(void);
 extern void ModbusDeInit(void);
-extern uint8_t ModubsReadDcData(void);
+extern uint8_t ModubsReadData(void);
 
 #endif

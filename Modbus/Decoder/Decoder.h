@@ -19,7 +19,7 @@ typedef struct
     double energy;
 }DecodedData_t;
 
-extern DecodedData_t DcDecodedData[numOfSlaves];
+extern DecodedData_t DcDecodedData[numOfDcSlaves];
 
 extern void DecodeModbus(uint8_t channelUsed, char* sensorName, uint16_t *rxBuffer, DecodedData_t * decodedData);
 

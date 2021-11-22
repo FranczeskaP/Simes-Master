@@ -12,7 +12,7 @@
 #define E_Q_INTEGER_MASK        (0xFFF0u)
 #define E_Q_DECIMAL_HIGH_MASK   (0x0Fu)
 
-DecodedData_t DcDecodedData[numOfSlaves];
+DecodedData_t DcDecodedData[numOfDcSlaves];
 
 static double DecodeTemperature(uint16_t tempBuffer);
 static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);

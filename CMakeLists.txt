@@ -13,12 +13,12 @@ target_sources(Master
     PRIVATE
     "Modbus/Decoder/Decoder.c"
     "Modbus/ModbusMaster/Modbus.c"
-    "Modbus/ModbusMaster/ModbusMaster.c"
     "Common/Curl/PostData.c"
     "Common/Json/cJSON.c"
-    "Common/CsvParser/csvparser.c"
-    "Mqtt/MqttMaster/MqttMaster.c"
-    "Mqtt/MqttDefinitions/MqttDefinitions.c")
+    "Common/Configuration/Configuration.c"
+    "Common/CsvParser/csvparser.c")
+    #"Mqtt/MqttMaster/MqttMaster.c"
+    #"Mqtt/MqttDefinitions/MqttDefinitions.c")
 
 target_include_directories(Master
     PUBLIC
@@ -29,9 +29,10 @@ target_include_directories(Master
     Modbus/ModbusMaster
     Common/Curl
     Common/Json
-    Common/CsvParser
-    Mqtt/MqttMaster
-    Mqtt/MqttDefinitions)
+    Common/Configuration
+    Common/CsvParser)
+    #Mqtt/MqttMaster
+    #Mqtt/MqttDefinitions)
 
 target_link_libraries(Master 
     ${MODBUS_LIBRARIES}
