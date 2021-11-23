@@ -16,9 +16,9 @@ target_sources(Master
     "Common/Curl/PostData.c"
     "Common/Json/cJSON.c"
     "Common/Configuration/Configuration.c"
-    "Common/CsvParser/csvparser.c")
-    #"Mqtt/MqttMaster/MqttMaster.c"
-    #"Mqtt/MqttDefinitions/MqttDefinitions.c")
+    "Common/CsvParser/csvparser.c"
+    "Mqtt/MqttMaster/MqttMaster.c"
+    "Mqtt/MqttDefinitions/MqttDefinitions.c")
 
 target_include_directories(Master
     PUBLIC
@@ -30,9 +30,9 @@ target_include_directories(Master
     Common/Curl
     Common/Json
     Common/Configuration
-    Common/CsvParser)
-    #Mqtt/MqttMaster
-    #Mqtt/MqttDefinitions)
+    Common/CsvParser
+    Mqtt/MqttMaster
+    Mqtt/MqttDefinitions)
 
 target_link_libraries(Master 
     ${MODBUS_LIBRARIES}

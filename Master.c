@@ -1,4 +1,4 @@
-//#include "MqttMaster.h"
+#include "MqttMaster.h"
 #include <signal.h>
 #include <stdint.h>
 #include <unistd.h>
@@ -9,7 +9,7 @@
 
 static uint8_t schedulerCalled = 0u;
 static void Initiaization(void);
-static void ModbusSchedulerCalled(int signum);
+static void SchedulerCalled(int signum);
 static void DeInitiaization(void);
 static void DecodeAllData(void);
 
@@ -24,6 +24,8 @@ int main()
             schedulerCalled = 0u;
             if(0u == ModubsReadData())
             {
+                ReadMqtt();
+                CheckIfAllUpdated();
                 dataReceiveError = 0u;
                 DecodeAllData();
                 //PerformPost(CreateStringToBePostedModbus(DecodedData));
@@ -77,10 +79,11 @@ static void Initiaization(void)
     InitConfigData();
     GetConfigurationData();
     ProcessConfigData();
-    //signal(SIGALRM, ModbusSchedulerCalled);
-    //alarm(5);
-    //ModbusInit();
-    //InitCurl();
+    signal(SIGALRM, SchedulerCalled);
+    alarm(5);
+    ModbusInit();
+    MqttInit();
+    InitCurl();
 }
 
 static void DeInitiaization(void)
@@ -90,7 +93,7 @@ static void DeInitiaization(void)
 }
 
 
-static void ModbusSchedulerCalled(int signum)
+static void SchedulerCalled(int signum)
 {
     schedulerCalled = 1u;
     alarm(5);

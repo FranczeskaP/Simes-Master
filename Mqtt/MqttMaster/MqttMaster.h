@@ -3,6 +3,8 @@
 
 #include "MqttDefinitions.h"
 
-extern void MqttMainFunction(void);
+extern void MqttInit(void);
+extern void ReadMqtt(void);
+extern bool CheckIfAllUpdated(void);
 
 #endif
