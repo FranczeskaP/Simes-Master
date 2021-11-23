@@ -11,6 +11,7 @@ static uint8_t schedulerCalled = 0u;
 static void Initiaization(void);
 static void ModbusSchedulerCalled(int signum);
 static void DeInitiaization(void);
+static void DecodeAllData(void);
 
 int main()
 {
@@ -24,11 +25,8 @@ int main()
             if(0u == ModubsReadData())
             {
                 dataReceiveError = 0u;
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor1", modbusDcSensors[slave0].receivedData, &DcDecodedData[slave0]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor2", modbusDcSensors[slave1].receivedData, &DcDecodedData[slave1]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor3", modbusDcSensors[slave2].receivedData, &DcDecodedData[slave2]);
-                DecodeModbus(DC_FIRST_CHANNEL, "Sensor4", modbusDcSensors[slave3].receivedData, &DcDecodedData[slave3]);
-                PerformPost(CreateStringToBePostedModbus(DcDecodedData));
+                DecodeAllData();
+                //PerformPost(CreateStringToBePostedModbus(DecodedData));
                 // printf("%f\n", DcDecodedData[0].current1);
                 // printf("%f\n", DcDecodedData[0].current2);
                 // printf("%u\n", DcDecodedData[0].efficiency);
@@ -96,4 +94,39 @@ static void ModbusSchedulerCalled(int signum)
 {
     schedulerCalled = 1u;
     alarm(5);
+}
+
+static void DecodeAllData(void)
+{
+    for(uint8_t i = 0u; i < MAX_NUM_OF_SENSORS-1; i++)
+    {
+        if(!configurationData[i].acSensor)
+        {
+            uint8_t decoderNum = 0u;
+            if(configurationData[i].channel1Used && configurationData[i].channel2Used)
+            {
+                DecodeDc(DC_FIRST_CHANNEL, configurationData[i].channel1Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
+                decoderNum++;
+                DecodeDc(DC_SECOND_CHANNEL, configurationData[i].channel2Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
+                decoderNum++;
+            }
+            else if(configurationData[i].channel1Used)
+            {
+                DecodeDc(DC_FIRST_CHANNEL, configurationData[i].channel1Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
+                decoderNum++;
+            }
+            else if(configurationData[i].channel2Used)
+            {
+                DecodeDc(DC_SECOND_CHANNEL, configurationData[i].channel2Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
+                decoderNum++;
+            }
+        }                
+    }
+    for(uint8_t j = 0u; j < MAX_NUM_OF_SENSORS; j++)
+    {
+        if(configurationData[j].acSensor)
+        {
+            DecodeAc(&DecodedData.acData, configurationData[j].communicationProtocol);
+        }
+    }
 }
