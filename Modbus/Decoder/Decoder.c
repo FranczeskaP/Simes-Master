@@ -11,9 +11,13 @@
 #define PERCENTAGE_MASK         (0x7Fu)
 #define E_Q_INTEGER_MASK        (0xFFF0u)
 #define E_Q_DECIMAL_HIGH_MASK   (0x0Fu)
+DecodedData_t DecodedData;
+DecodedData_t DcDecodedData[numOfDcSlaves];
 
-DecodedData_t DcDecodedData[numOfSlaves];
-
+static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData);
+static void DecodeAcModbus(AcDecodedData_t * decodedData);
+static void DecodeAcMqtt(AcDecodedData_t * decodedData);
+static void DecodeDcMqtt(DcDecodedData_t * decodedData);
 static double DecodeTemperature(uint16_t tempBuffer);
 static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeCurrent(uint16_t currentBuffer);
@@ -22,9 +26,41 @@ static uint16_t DecodeEfficiency(uint16_t efficiencyBuffer);
 static double DecodeElectricCharge(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer);
 
-void DecodeModbus(uint8_t channelUsed, char* sensorName, uint16_t *rxBuffer, DecodedData_t * decodedData)
+void DecodeData(Configuration_t config)
 {
-    decodedData->name = sensorName;
+    DecodeAc();
+    for(uint8_t i = 1u; i < MAX_NUM_OF_SENSORS; i++)
+    {
+        DecodeDc();
+    }
+}
+
+void DecodeDc(uint16_t *rxBuffer, DcDecodedData_t * decodedData, CommunicationProtocols_e comProt)
+{
+    if(comProt == Modbus)
+    {
+        DecodeDcModbus(rxBuffer, decodedData);
+    }
+    else if(comProt == Mqtt)
+    {
+        DecodeDcMqtt(decodedData);
+    }
+}
+
+void DecodeAc(AcDecodedData_t * decodedData, CommunicationProtocols_e comProt)
+{
+    if(comProt == Modbus)
+    {
+        DecodeAcModbus(decodedData);
+    }
+    else if(comProt == Mqtt)
+    {
+        DecodeAcMqtt(decodedData);
+    }
+}
+
+void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData)
+{
     decodedData->temperature = DecodeTemperature(rxBuffer[0]);
     decodedData->efficiency = DecodeEfficiency(rxBuffer[9]);
     if(DC_FIRST_CHANNEL == channelUsed)
@@ -43,6 +79,21 @@ void DecodeModbus(uint8_t channelUsed, char* sensorName, uint16_t *rxBuffer, Dec
         decodedData->electricCharge = DecodeElectricCharge(rxBuffer[12], rxBuffer[13]);
         decodedData->energy = DecodeEnergy(rxBuffer[16], rxBuffer[17]);
     }
+}
+
+void DecodeAcModbus(AcDecodedData_t * decodedData)
+{
+    /* todo */
+}
+
+void DecodeAcMqtt(AcDecodedData_t * decodedData)
+{
+    /* todo */
+}
+
+void DecodeDcMqtt(DcDecodedData_t * decodedData)
+{
+    /* todo */
 }
 
 static double DecodeTemperature(uint16_t tempBuffer)

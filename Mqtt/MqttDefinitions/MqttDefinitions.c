@@ -74,3 +74,5 @@ MqttStruct_t DcSensor5[TotalNumOfDcSensorTopics] = {
     [QCh2] = {"DeviceNo5/Q_CH2", false, ""},
     [Temp] = {"DeviceNo5/Temp", false, ""}
 };
+
+DcReceivedData_t DcReceivedData[5];

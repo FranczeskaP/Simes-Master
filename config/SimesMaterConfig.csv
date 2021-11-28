@@ -1,0 +1,7 @@
+SensorId,SensorName,CommunicationMetod
+0,Sensor1,Modbus
+1,Sensor2,Modbus
+2,Sensor3,Mqtt
+3,Sensor4,Modbus
+4,Sensor5,Modbus
+5,Sensor6,Modbus

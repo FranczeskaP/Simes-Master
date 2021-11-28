@@ -30,6 +30,14 @@ extern MqttStruct_t DcSensor1[TotalNumOfDcSensorTopics];
 extern MqttStruct_t DcSensor2[TotalNumOfDcSensorTopics];
 extern MqttStruct_t DcSensor3[TotalNumOfDcSensorTopics];
 extern MqttStruct_t DcSensor4[TotalNumOfDcSensorTopics];
-extern MqttStruct_t DcSensor5[TotalNumOfDcSensorTopics];
+extern MqttStruct_t DcSensor5[TotalNumOfDcSensorTopics]; 
+
+typedef struct 
+{
+    uint16_t modbusReceivedData[18];
+	char * mqttReceivedData[TotalNumOfDcSensorTopics];
+}DcReceivedData_t;
+
+extern DcReceivedData_t DcReceivedData[5];
 
 #endif
