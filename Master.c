@@ -11,7 +11,6 @@ static uint8_t schedulerCalled = 0u;
 static void Initiaization(void);
 static void SchedulerCalled(int signum);
 static void DeInitiaization(void);
-static void DecodeAllData(void);
 
 int main()
 {
@@ -27,7 +26,7 @@ int main()
                 ReadMqtt();
                 CheckIfAllUpdated();
                 dataReceiveError = 0u;
-                DecodeAllData();
+                DecodeData();
                 //PerformPost(CreateStringToBePostedModbus(DecodedData));
                 // printf("%f\n", DcDecodedData[0].current1);
                 // printf("%f\n", DcDecodedData[0].current2);
@@ -99,37 +98,3 @@ static void SchedulerCalled(int signum)
     alarm(5);
 }
 
-static void DecodeAllData(void)
-{
-    for(uint8_t i = 0u; i < MAX_NUM_OF_SENSORS-1; i++)
-    {
-        if(!configurationData[i].acSensor)
-        {
-            uint8_t decoderNum = 0u;
-            if(configurationData[i].channel1Used && configurationData[i].channel2Used)
-            {
-                DecodeDc(DC_FIRST_CHANNEL, configurationData[i].channel1Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
-                decoderNum++;
-                DecodeDc(DC_SECOND_CHANNEL, configurationData[i].channel2Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
-                decoderNum++;
-            }
-            else if(configurationData[i].channel1Used)
-            {
-                DecodeDc(DC_FIRST_CHANNEL, configurationData[i].channel1Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
-                decoderNum++;
-            }
-            else if(configurationData[i].channel2Used)
-            {
-                DecodeDc(DC_SECOND_CHANNEL, configurationData[i].channel2Name, modbusDcSensors[configurationData[i].id-1].receivedData, &DecodedData.dcData[decoderNum], configurationData[i].communicationProtocol);
-                decoderNum++;
-            }
-        }                
-    }
-    for(uint8_t j = 0u; j < MAX_NUM_OF_SENSORS; j++)
-    {
-        if(configurationData[j].acSensor)
-        {
-            DecodeAc(&DecodedData.acData, configurationData[j].communicationProtocol);
-        }
-    }
-}

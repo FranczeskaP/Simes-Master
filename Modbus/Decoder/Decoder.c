@@ -94,7 +94,7 @@ static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData
         decodedData->current = atof(rxBuffer[Ch1]);
         decodedData->power = atof(rxBuffer[P1]);
         decodedData->electricCharge = atof(rxBuffer[QCh1]);
-        decodedData->energy = atof(EnergyCh1);
+        decodedData->energy = atof(rxBuffer[EnergyCh1]);
     }
     else if(DC_SECOND_CHANNEL == channelUsed)
     {
@@ -102,7 +102,7 @@ static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData
         decodedData->current = atof(rxBuffer[Ch3]);
         decodedData->power = atof(rxBuffer[P2]);
         decodedData->electricCharge = atof(rxBuffer[QCh2]);
-        decodedData->energy = atof(EnergyCh2);
+        decodedData->energy = atof(rxBuffer[EnergyCh2]);
     }
 }
 

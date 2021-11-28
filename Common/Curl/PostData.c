@@ -12,8 +12,9 @@ void InitCurl(void)
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfDcSlaves])
+char * CreateStringToBePostedModbus(DcDecodedData_t decodedData[numOfDcSlaves])
 {
+    /* todo update
     cJSON *data = cJSON_CreateObject();
     for(int i = 0; i<numOfDcSlaves; i++)
     {
@@ -65,7 +66,8 @@ char * CreateStringToBePostedModbus(DecodedData_t decodedData[numOfDcSlaves])
 
 end:
     cJSON_Delete(data);
-    return string;
+    return string; */
+    return "";
 }
 
 

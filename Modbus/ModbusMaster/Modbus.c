@@ -15,7 +15,6 @@
 #define TIME_MS_MODBUS          (2u)
 
 ModbusData_t modbusSensors;
-ModbusDataDc_t modbusDcSensors[numOfDcSlaves];
 static struct timespec WaitTimeModbus = {
     .tv_sec = 0,
     .tv_nsec = TIME_MS_MODBUS * 1000000
@@ -49,18 +48,14 @@ void ModbusDeInit(void)
 uint8_t ModubsReadData(void)
 {
     uint8_t error = 0u;
-    for(uint8_t i = 1u; i < MAX_NUM_OF_SENSORS; i++)
+    for(uint8_t i = 0u; i < numOfDcSlaves; i++)
     {
         if(DcSensorData[i].communicationProtocol = Modbus)
         {
             error |= modbusReadDc(DcSensorData[i].slaveNum);
         }
     }
-/* todo update */
-    if(configurationData[0].communicationProtocol = Modbus)
-    {
-        error |= modbusReadAc();
-    }
+/* todo add AC Read */
 
     return error;
 }

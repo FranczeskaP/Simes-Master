@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include "Configuration.h"
 #include "csvparser.h"
-#include "DataTypes.h"
 
 ConfigParams_t configuration[MAX_NUM_OF_SENSORS];
-Configuration_t configurationData[MAX_NUM_OF_SENSORS];
 
 void GetConfigurationData(void)
 {
@@ -33,26 +31,25 @@ void GetConfigurationData(void)
 void ProcessConfigData(void)
 {
     /* todo AC sensor for i = 0 */
-    for(uint8_t i = 1u; i < MAX_NUM_OF_SENSORS; i++)
+    for(uint8_t i = 0u; i < numOfDcSlaves; i++)
     {
-        int id = atoi(configuration[i].SensorId);
-        DcSensorData[id-1].slaveNum = id;
+        DcSensorData[i].slaveNum = (uint16_t)atoi(configuration[i].SensorId);
 
         if(0 == strcmp(configuration[i].CommunicationMetod, "Modbus"))
         {
-            DcSensorData[id-1].communicationProtocol = Modbus;
+            DcSensorData[i].communicationProtocol = Modbus;
         }
         else if(0 == strcmp(configuration[i].CommunicationMetod,  "Mqtt"))
         {
-            DcSensorData[id-1].communicationProtocol = Mqtt;
+            DcSensorData[i].communicationProtocol = Mqtt;
         }
 
     }
 
-    for(int i = 0; i < MAX_NUM_OF_SENSORS; i++)
+    for(uint8_t i = 0u; i < numOfDcSlaves; i++)
     {
-        printf("Id: %i\n", configurationData[i].id);
-        printf("ComProt: %i\n", configurationData[i].communicationProtocol);
+        printf("Id: %i\n", DcSensorData[i].slaveNum);
+        printf("ComProt: %i\n", DcSensorData[i].communicationProtocol);
     }
 
 }
@@ -61,8 +58,6 @@ void InitConfigData(void)
 {
     for(uint8_t i = 0u; i < MAX_NUM_OF_SENSORS; i++)
     {
-        configurationData[i].id = 0u;
-        configurationData[i].communicationProtocol = None;
         configuration[i].SensorId = malloc(64 * sizeof(char));
         configuration[i].CommunicationMetod = malloc(64 * sizeof(char));
     }

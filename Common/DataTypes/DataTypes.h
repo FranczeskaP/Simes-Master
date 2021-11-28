@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <modbus.h>
 
 #define NUM_OF_DC_REGISTERS  (18u)
 #define NUM_OF_AC_SENSORS   1u
