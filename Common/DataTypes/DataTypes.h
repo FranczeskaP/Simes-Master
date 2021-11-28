@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define NUM_OF_DC_REGISTERS  (18u)
+#define NUM_OF_AC_SENSORS   1u
+
 typedef enum
 {
     slave0 = 0u,
@@ -14,6 +17,7 @@ typedef enum
     numOfDcSlaves
 }DcSlaves;
 
+#define MAX_NUM_OF_SENSORS  ((uint8_t)numOfDcSlaves + NUM_OF_AC_SENSORS)
 
 typedef enum{
     None,
@@ -67,11 +71,13 @@ typedef struct
     CommunicationProtocols_e communicationProtocol;
     MqttStruct_t DcSensorMqttData[TotalNumOfDcSensorTopics];
 	char * mqttReceivedData[TotalNumOfDcSensorTopics];
+    bool allTopicsUpdated;
     modbus_t *slave;
     uint16_t modbusReceivedData[18];
-    DcDecodedData_t DcDecodedData;
+    DcDecodedData_t dcDecodedDataCh1;
+    DcDecodedData_t dcDecodedDataCh2;
 }DcSensorData_t;
 
-extern DcSensorData_t DcSensorData[5];
+extern DcSensorData_t DcSensorData[numOfDcSlaves];
 
 #endif

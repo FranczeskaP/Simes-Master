@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Configuration.h"
 #include "csvparser.h"
+#include "DataTypes.h"
 
 ConfigParams_t configuration[MAX_NUM_OF_SENSORS];
 Configuration_t configurationData[MAX_NUM_OF_SENSORS];
@@ -31,18 +32,19 @@ void GetConfigurationData(void)
 
 void ProcessConfigData(void)
 {
-    for(uint8_t i = 0u; i < MAX_NUM_OF_SENSORS; i++)
+    /* todo AC sensor for i = 0 */
+    for(uint8_t i = 1u; i < MAX_NUM_OF_SENSORS; i++)
     {
         int id = atoi(configuration[i].SensorId);
-        configurationData[id].id = id;
+        DcSensorData[id-1].slaveNum = id;
 
         if(0 == strcmp(configuration[i].CommunicationMetod, "Modbus"))
         {
-            configurationData[id - 1].communicationProtocol = Modbus;
+            DcSensorData[id-1].communicationProtocol = Modbus;
         }
         else if(0 == strcmp(configuration[i].CommunicationMetod,  "Mqtt"))
         {
-            configurationData[id - 1].communicationProtocol = Mqtt;
+            DcSensorData[id-1].communicationProtocol = Mqtt;
         }
 
     }

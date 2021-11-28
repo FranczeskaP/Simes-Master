@@ -5,8 +5,7 @@
 #include <string.h>
 #include <time.h>
 #include "Modbus.h"
-#include "Configuration.h"
-#include "MqttDefinitions.h"
+#include "DataTypes.h"
 
 #define DEVICE_NAME             ("/dev/ttyUSB0")
 #define BAUDRATE                (9600u)
@@ -41,11 +40,10 @@ void ModbusDeInit(void)
 {
     for(uint16_t i = 0u; i < numOfDcSlaves; i++)
     {
-        modbus_close(modbusSensors.dcSensors[i].slave);
-        modbus_free(modbusSensors.dcSensors[i].slave);
+        modbus_close(DcSensorData[i].slave);
+        modbus_free(DcSensorData[i].slave);
     }
-    modbus_close(modbusSensors.acSensor.slave);
-    modbus_free(modbusSensors.acSensor.slave);
+    /* todo AC sensor de init */
 }
 
 uint8_t ModubsReadData(void)
@@ -53,11 +51,12 @@ uint8_t ModubsReadData(void)
     uint8_t error = 0u;
     for(uint8_t i = 1u; i < MAX_NUM_OF_SENSORS; i++)
     {
-        if(configurationData[i].communicationProtocol = Modbus)
+        if(DcSensorData[i].communicationProtocol = Modbus)
         {
-            error |= modbusReadDc(configurationData[i].id);
+            error |= modbusReadDc(DcSensorData[i].slaveNum);
         }
     }
+/* todo update */
     if(configurationData[0].communicationProtocol = Modbus)
     {
         error |= modbusReadAc();
@@ -69,7 +68,7 @@ uint8_t ModubsReadData(void)
 static uint8_t modbusReadDc(uint16_t slaveNum)
 {
     uint8_t error = 0u;
-    int numOfReadRegs = modbus_read_input_registers(modbusSensors.dcSensors[slaveNum-1].slave, 0u, NUM_OF_DC_REGISTERS, DcReceivedData[slaveNum-1].modbusReceivedData);
+    int numOfReadRegs = modbus_read_input_registers(DcSensorData[slaveNum-1].slave, 0u, NUM_OF_DC_REGISTERS, DcSensorData[slaveNum-1].modbusReceivedData);
     if (numOfReadRegs != NUM_OF_DC_REGISTERS) 
     {
         error = 1u;
@@ -79,6 +78,7 @@ static uint8_t modbusReadDc(uint16_t slaveNum)
     return error;
 }
 
+/* todo update */
 static uint8_t modbusReadAc(void)
 {
     uint8_t error = 0u;
@@ -96,25 +96,25 @@ static void initDcModbus(void)
 {
     for(uint16_t i = 0u; i < numOfDcSlaves; i++)
     {
-        modbusSensors.dcSensors[i].slave = modbus_new_rtu(DEVICE_NAME, BAUDRATE, PARITY, DATA_BITS, STOP_BITS);
-        if (!modbusSensors.dcSensors[i].slave) 
+        DcSensorData[i].slave = modbus_new_rtu(DEVICE_NAME, BAUDRATE, PARITY, DATA_BITS, STOP_BITS);
+        if (!DcSensorData[i].slave) 
         {
             fprintf(stderr, "Failed to create the context: %s\n", modbus_strerror(errno));
             exit(1);
         }
 
-        if (modbus_connect(modbusSensors.dcSensors[i].slave) == -1) 
+        if (modbus_connect(DcSensorData[i].slave) == -1) 
         {
             fprintf(stderr, "Unable to connect: %s\n", modbus_strerror(errno));
-            modbus_free(modbusSensors.dcSensors[i].slave);
+            modbus_free(DcSensorData[i].slave);
             exit(1);
         }
-        modbusSensors.dcSensors[i].slaveNum = i+1;
-        modbus_set_response_timeout(modbusSensors.dcSensors[i].slave, response_timeout.tv_sec, response_timeout.tv_usec);
-        modbus_set_slave(modbusSensors.dcSensors[i].slave, modbusSensors.dcSensors[i].slaveNum);
+        modbus_set_response_timeout(DcSensorData[i].slave, response_timeout.tv_sec, response_timeout.tv_usec);
+        modbus_set_slave(DcSensorData[i].slave, DcSensorData[i].slaveNum);
     }
 }
 
+/* todo update */
 static void initAcModbus(void)
 {
     modbusSensors.acSensor.slave = modbus_new_rtu(DEVICE_NAME, BAUDRATE, PARITY, DATA_BITS, STOP_BITS);
