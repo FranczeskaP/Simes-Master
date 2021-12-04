@@ -70,7 +70,7 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc1 */
     cJSON *sensorDc1 = cJSON_AddObjectToObject(data, SensorNames[1u]);
     if (sensorDc1 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage ) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc1, "currentCh1", DcSensorData[1u].dcDecodedDataCh1.current) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc1, "powerDcCh1", DcSensorData[1u].dcDecodedDataCh1.power) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc1, "energyDcCh1", DcSensorData[1u].dcDecodedDataCh1.energy) == NULL) goto end;
@@ -86,7 +86,7 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc2 */
     cJSON *sensorDc2 = cJSON_AddObjectToObject(data, SensorNames[2u]);
     if (sensorDc2 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh1", DcSensorData[2u].dcDecodedDataCh1.voltage ) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc2, "currentCh1", DcSensorData[2u].dcDecodedDataCh1.current) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc2, "powerDcCh1", DcSensorData[2u].dcDecodedDataCh1.power) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc2, "energyDcCh1", DcSensorData[2u].dcDecodedDataCh1.energy) == NULL) goto end;
@@ -103,7 +103,7 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc3 */
     cJSON *sensorDc3 = cJSON_AddObjectToObject(data, SensorNames[3u]);
     if (sensorDc3 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh1", DcSensorData[3u].dcDecodedDataCh1.voltage ) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "currentCh1", DcSensorData[3u].dcDecodedDataCh1.current) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "powerDcCh1", DcSensorData[3u].dcDecodedDataCh1.power) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "energyDcCh1", DcSensorData[3u].dcDecodedDataCh1.energy) == NULL) goto end;
@@ -123,7 +123,7 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc4 */
     cJSON *sensorDc4 = cJSON_AddObjectToObject(data, SensorNames[4u]);
     if (sensorDc4 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh1", DcSensorData[4u].dcDecodedDataCh1.voltage ) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "currentCh1", DcSensorData[4u].dcDecodedDataCh1.current) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "powerDcCh1", DcSensorData[4u].dcDecodedDataCh1.power) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "energyDcCh1", DcSensorData[4u].dcDecodedDataCh1.energy) == NULL) goto end;
@@ -143,7 +143,7 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc5 */
     cJSON *sensorDc5 = cJSON_AddObjectToObject(data, SensorNames[5u]);
     if (sensorDc5 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc5, "voltageCh1", DcSensorData[5u].dcDecodedDataCh1.voltage ) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc5, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc5, "currentCh1", DcSensorData[5u].dcDecodedDataCh1.current) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc5, "powerDcCh1", DcSensorData[5u].dcDecodedDataCh1.power) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc5, "energyDcCh1", DcSensorData[5u].dcDecodedDataCh1.energy) == NULL) goto end;
