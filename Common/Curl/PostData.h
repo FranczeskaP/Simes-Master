@@ -6,7 +6,7 @@
 #include "DataTypes.h"
 
 extern void InitCurl(void);
-extern char * CreateStringToBePostedModbus(DcDecodedData_t decodedData[numOfDcSlaves]);
+extern char * CreateStringToBePosted(void);
 extern void PerformPost(char * dataToPost);
 extern void DeInitCurl(void);
 

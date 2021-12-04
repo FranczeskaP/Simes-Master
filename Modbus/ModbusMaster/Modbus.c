@@ -52,7 +52,9 @@ uint8_t ModubsReadData(void)
     {
         if(DcSensorData[i].communicationProtocol = Modbus)
         {
-            error |= modbusReadDc(DcSensorData[i].slaveNum);
+            DcSensorData[i].updated = modbusReadDc(DcSensorData[i].slaveNum);
+            error |= DcSensorData[i].updated;
+            DcSensorData[i].updated = !DcSensorData[i].updated;
         }
     }
 /* todo add AC Read */

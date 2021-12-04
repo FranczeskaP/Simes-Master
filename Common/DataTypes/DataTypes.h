@@ -77,6 +77,7 @@ typedef struct
     uint16_t modbusReceivedData[18];
     DcDecodedData_t dcDecodedDataCh1;
     DcDecodedData_t dcDecodedDataCh2;
+    bool updated;
 }DcSensorData_t;
 
 extern DcSensorData_t DcSensorData[numOfDcSlaves];

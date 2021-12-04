@@ -15,16 +15,6 @@ static uint8_t NotAllTopicsUpdated = 0u;
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc);
 static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_message *msg);
 
-void MqttMainFunction(void)
-{
-	if(NotAllTopicsUpdated >= 5u)
-	{
-		printf("!!! ERROR !!! Not all sensors send data. !!! ERROR !!!\n");
-		//todo Post with error data ?? 
-    }
-	 
-}
-
 void MqttInit(void)
 {
 	int id = 1;
@@ -52,57 +42,6 @@ void ReadMqtt(void)
     sleep(1);
 	mosquitto_loop_stop(master, true);
 }
-
-bool CheckIfAllUpdated(void)
-{
-    for(uint8_t i = 0u; i < numOfDcSlaves; i++)
-    {
-        DcSensorData[i].allTopicsUpdated = true;
-    }
-	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
-	{
-		if(true != DcSensorData[slave0].DcSensorMqttData[i].topicUpdated)
-		{
-            DcSensorData[slave0].allTopicsUpdated = false;
-		}
-		else if(true != DcSensorData[slave1].DcSensorMqttData[i].topicUpdated)
-		{
-            DcSensorData[slave1].allTopicsUpdated = false;
-		}
-		else if(true != DcSensorData[slave2].DcSensorMqttData[i].topicUpdated)
-		{
-            DcSensorData[slave2].allTopicsUpdated = false;
-		}
-		else if(true != DcSensorData[slave3].DcSensorMqttData[i].topicUpdated)
-		{
-            DcSensorData[slave3].allTopicsUpdated = false;
-		}
-		else if(true != DcSensorData[slave4].DcSensorMqttData[i].topicUpdated)
-		{
-            DcSensorData[slave4].allTopicsUpdated = false;
-		}
-	}
-	if((true == DcSensorData[slave0].allTopicsUpdated) && (true == DcSensorData[slave1].allTopicsUpdated) && 
-	   (true == DcSensorData[slave2].allTopicsUpdated) && (true == DcSensorData[slave3].allTopicsUpdated) && 
-       (true == DcSensorData[slave4].allTopicsUpdated))
-	{
-		for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
-		{
-			DcSensorData[slave0].DcSensorMqttData[i].topicUpdated = false;
-			DcSensorData[slave1].DcSensorMqttData[i].topicUpdated = false;
-			DcSensorData[slave2].DcSensorMqttData[i].topicUpdated = false;
-			DcSensorData[slave3].DcSensorMqttData[i].topicUpdated = false;
-			DcSensorData[slave4].DcSensorMqttData[i].topicUpdated = false;
-		}
-		return true;
-	}
-	else
-	{
-		NotAllTopicsUpdated++;
-		return false;
-	}
-}
-
 
 static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 {

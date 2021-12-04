@@ -92,6 +92,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         [Temp] = {"DeviceNo1/Temp", false}
         }, 
         .allTopicsUpdated = false,
+        .updated = false
     },
     [slave1] = {
         .DcSensorMqttData = {
@@ -109,6 +110,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         [Temp] = {"DeviceNo2/Temp", false}
         }, 
         .allTopicsUpdated = false,
+        .updated = false
     },
     [slave2] = {
         .DcSensorMqttData = {
@@ -126,6 +128,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         [Temp] = {"DeviceNo3/Temp", false}
         }, 
         .allTopicsUpdated = false,
+        .updated = false
     },
     [slave3] = {
         .DcSensorMqttData = {
@@ -143,6 +146,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         [Temp] = {"DeviceNo4/Temp", false}
         }, 
         .allTopicsUpdated = false,
+        .updated = false
     },
     [slave4] = {
         .DcSensorMqttData = {
@@ -160,5 +164,6 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         [Temp] = {"DeviceNo5/Temp", false}
         }, 
         .allTopicsUpdated = false,
+        .updated = false
     }
 };

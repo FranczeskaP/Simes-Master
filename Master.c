@@ -24,10 +24,9 @@ int main()
             if(0u == ModubsReadData())
             {
                 ReadMqtt();
-                CheckIfAllUpdated();
                 dataReceiveError = 0u;
                 DecodeData();
-                //PerformPost(CreateStringToBePostedModbus(DecodedData));
+                PerformPost(CreateStringToBePosted());
                 // printf("%f\n", DcDecodedData[0].current1);
                 // printf("%f\n", DcDecodedData[0].current2);
                 // printf("%u\n", DcDecodedData[0].efficiency);

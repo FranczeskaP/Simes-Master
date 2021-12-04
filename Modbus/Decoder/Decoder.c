@@ -15,9 +15,12 @@
 #define E_Q_DECIMAL_HIGH_MASK   (0x0Fu)
 #define DC_FIRST_CHANNEL           (1u)
 #define DC_SECOND_CHANNEL          (2u)
+#define ERROR_DOUBLE            (255.f)
+#define ERROR_UINT              (255u)
 
 static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData, uint8_t channelUsed);
-static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed);
+static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed, MqttStruct_t mqttData[TotalNumOfDcSensorTopics]);
+static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUsed);
 static void DecodeAcModbus(void);
 static void DecodeAcMqtt(void);
 static double DecodeTemperature(uint16_t tempBuffer);
@@ -35,13 +38,21 @@ void DecodeData(void)
     {
         if(DcSensorData[i].communicationProtocol == Modbus)
         {
-            DecodeDcModbus(DcSensorData[i].modbusReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL);
-            DecodeDcModbus(DcSensorData[i].modbusReceivedData, &DcSensorData[i].dcDecodedDataCh2, DC_SECOND_CHANNEL);
+            if(DcSensorData[i].updated)
+            {
+                DecodeDcModbus(DcSensorData[i].modbusReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL);
+                DecodeDcModbus(DcSensorData[i].modbusReceivedData, &DcSensorData[i].dcDecodedDataCh2, DC_SECOND_CHANNEL);
+            }
+            else
+            {
+                DecodeDcNotUpdated(&DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL);
+                DecodeDcNotUpdated(&DcSensorData[i].dcDecodedDataCh2, DC_SECOND_CHANNEL);
+            }
         }
         else if(DcSensorData[i].communicationProtocol == Mqtt)
         {
-            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL);
-            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_SECOND_CHANNEL);
+            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL, DcSensorData[i].DcSensorMqttData);
+            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_SECOND_CHANNEL, DcSensorData[i].DcSensorMqttData);
         }
     }
 }
@@ -74,6 +85,51 @@ static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData, ui
     }
 }
 
+static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed, MqttStruct_t mqttData[TotalNumOfDcSensorTopics])
+{
+
+    decodedData->temperature = mqttData[Temp].topicUpdated ? atof(rxBuffer[Temp]) : ERROR_DOUBLE;
+    decodedData->efficiency = mqttData[Eff].topicUpdated ? (uint16_t)atoi(rxBuffer[Eff]) : ERROR_UINT;
+    if(DC_FIRST_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = mqttData[Ch2].topicUpdated ? atof(rxBuffer[Ch2]) : ERROR_DOUBLE;
+        decodedData->current = mqttData[Ch1].topicUpdated ? atof(rxBuffer[Ch1]) : ERROR_DOUBLE;
+        decodedData->power = mqttData[P1].topicUpdated ? atof(rxBuffer[P1]) : ERROR_DOUBLE;
+        decodedData->electricCharge = mqttData[QCh1].topicUpdated ? atof(rxBuffer[QCh1]) : ERROR_DOUBLE;
+        decodedData->energy = mqttData[EnergyCh1].topicUpdated ? atof(rxBuffer[EnergyCh1]) : ERROR_DOUBLE;
+    }
+    else if(DC_SECOND_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = mqttData[Ch4].topicUpdated ? atof(rxBuffer[Ch4]) : ERROR_DOUBLE;
+        decodedData->current = mqttData[Ch3].topicUpdated ? atof(rxBuffer[Ch3]) : ERROR_DOUBLE;
+        decodedData->power = mqttData[P2].topicUpdated ? atof(rxBuffer[P2]) : ERROR_DOUBLE;
+        decodedData->electricCharge = mqttData[QCh2].topicUpdated ? atof(rxBuffer[QCh2]) : ERROR_DOUBLE;
+        decodedData->energy = mqttData[EnergyCh2].topicUpdated ? atof(rxBuffer[EnergyCh2]) : ERROR_DOUBLE;
+    }
+}
+
+static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUsed)
+{
+    decodedData->temperature = ERROR_DOUBLE;
+    decodedData->efficiency = ERROR_UINT;
+    if(DC_FIRST_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = ERROR_DOUBLE;
+        decodedData->current = ERROR_DOUBLE;
+        decodedData->power = ERROR_DOUBLE;
+        decodedData->electricCharge = ERROR_DOUBLE;
+        decodedData->energy = ERROR_DOUBLE;
+    }
+    else if(DC_SECOND_CHANNEL == channelUsed)
+    {
+        decodedData->voltage = ERROR_DOUBLE;
+        decodedData->current = ERROR_DOUBLE;
+        decodedData->power = ERROR_DOUBLE;
+        decodedData->electricCharge = ERROR_DOUBLE;
+        decodedData->energy = ERROR_DOUBLE;
+    }
+}
+
 static void DecodeAcModbus(void)
 {
     /* todo */
@@ -82,28 +138,6 @@ static void DecodeAcModbus(void)
 static void DecodeAcMqtt(void)
 {
     /* todo */
-}
-
-static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed)
-{
-    decodedData->temperature = atof(rxBuffer[Temp]);
-    decodedData->efficiency = (uint16_t)atoi(rxBuffer[Eff]);
-    if(DC_FIRST_CHANNEL == channelUsed)
-    {
-        decodedData->voltage = atof(rxBuffer[Ch2]);
-        decodedData->current = atof(rxBuffer[Ch1]);
-        decodedData->power = atof(rxBuffer[P1]);
-        decodedData->electricCharge = atof(rxBuffer[QCh1]);
-        decodedData->energy = atof(rxBuffer[EnergyCh1]);
-    }
-    else if(DC_SECOND_CHANNEL == channelUsed)
-    {
-        decodedData->voltage = atof(rxBuffer[Ch4]);
-        decodedData->current = atof(rxBuffer[Ch3]);
-        decodedData->power = atof(rxBuffer[P2]);
-        decodedData->electricCharge = atof(rxBuffer[QCh2]);
-        decodedData->energy = atof(rxBuffer[EnergyCh2]);
-    }
 }
 
 static double DecodeTemperature(uint16_t tempBuffer)

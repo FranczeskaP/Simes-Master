@@ -5,6 +5,5 @@
 
 extern void MqttInit(void);
 extern void ReadMqtt(void);
-extern bool CheckIfAllUpdated(void);
 
 #endif
