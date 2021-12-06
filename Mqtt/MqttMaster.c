@@ -51,7 +51,7 @@ static void OnConnect(struct mosquitto *mosq, void *obj, int rc)
 		{
 			if(DcSensorData[j].communicationProtocol == Mqtt)
 			{
-				mosquitto_subscribe(mosq, NULL, DcSensorData[j].DcSensorMqttData[i].topic, 0);
+				mosquitto_subscribe(mosq, NULL, DcSensorData[j].dcSensorMqttData[i].topic, 0);
 			}
 		}
 	}
@@ -61,33 +61,33 @@ static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{
-		if(0 == strcmp(DcSensorData[slave0].DcSensorMqttData[i].topic, msg->topic))
+		if(0 == strcmp(DcSensorData[slave0].dcSensorMqttData[i].topic, msg->topic))
 		{
-			DcSensorData[slave0].DcSensorMqttData[i].topicUpdated = true;
+			DcSensorData[slave0].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave0].mqttReceivedData[i], msg->payload);
 			break;
 		}
-		else if(0 == strcmp(DcSensorData[slave1].DcSensorMqttData[i].topic, msg->topic))
+		else if(0 == strcmp(DcSensorData[slave1].dcSensorMqttData[i].topic, msg->topic))
 		{
-			DcSensorData[slave1].DcSensorMqttData[i].topicUpdated = true;
+			DcSensorData[slave1].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave1].mqttReceivedData[i], msg->payload);
 			break;
 		}
-		else if(0 == strcmp(DcSensorData[slave2].DcSensorMqttData[i].topic, msg->topic))
+		else if(0 == strcmp(DcSensorData[slave2].dcSensorMqttData[i].topic, msg->topic))
 		{
-			DcSensorData[slave2].DcSensorMqttData[i].topicUpdated = true;
+			DcSensorData[slave2].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave2].mqttReceivedData[i], msg->payload);
 			break;
 		}
-		else if(0 == strcmp(DcSensorData[slave3].DcSensorMqttData[i].topic, msg->topic))
+		else if(0 == strcmp(DcSensorData[slave3].dcSensorMqttData[i].topic, msg->topic))
 		{
-			DcSensorData[slave3].DcSensorMqttData[i].topicUpdated = true;
+			DcSensorData[slave3].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave3].mqttReceivedData[i], msg->payload);
 			break;
 		}
-		else if(0 == strcmp(DcSensorData[slave4].DcSensorMqttData[i].topic, msg->topic))
+		else if(0 == strcmp(DcSensorData[slave4].dcSensorMqttData[i].topic, msg->topic))
 		{
-			DcSensorData[slave4].DcSensorMqttData[i].topicUpdated = true;
+			DcSensorData[slave4].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave4].mqttReceivedData[i], msg->payload);
 			break;
 		}

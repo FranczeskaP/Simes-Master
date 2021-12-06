@@ -65,6 +65,7 @@ uint8_t ModubsReadData(void)
 static uint8_t modbusReadDc(uint16_t slaveNum)
 {
     uint8_t error = 0u;
+    /* Kod 0x04u */
     int numOfReadRegs = modbus_read_input_registers(DcSensorData[slaveNum-1].slave, 0u, NUM_OF_DC_REGISTERS, DcSensorData[slaveNum-1].modbusReceivedData);
     if (numOfReadRegs != NUM_OF_DC_REGISTERS) 
     {
@@ -79,7 +80,8 @@ static uint8_t modbusReadDc(uint16_t slaveNum)
 static uint8_t modbusReadAc(void)
 {
     uint8_t error = 0u;
-    int numOfReadRegs = modbus_read_input_registers(modbusSensors.acSensor.slave, 0u, NUM_OF_AC_REGISTERS, modbusSensors.acSensor.receivedData);
+    /* Kod 0x03u */
+    int numOfReadRegs = modbus_read_registers(modbusSensors.acSensor.slave, 0u, NUM_OF_AC_REGISTERS, modbusSensors.acSensor.receivedData);
     if (numOfReadRegs != NUM_OF_AC_REGISTERS) 
     {
         error = 1u;

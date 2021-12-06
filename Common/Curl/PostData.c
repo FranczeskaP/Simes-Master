@@ -50,22 +50,22 @@ char * CreateStringToBePosted(void)
     /*Sensor Ac */
     cJSON *sensorAc = cJSON_AddObjectToObject(data, SensorNames[0u]);
     if (sensorAc == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "voltage1Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "voltage2Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "voltage3Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "current1Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "current2Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "current3Rms", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "pPower", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "qPower", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "sPower", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "pEnergy", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "qEnergy", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "currentThd", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "voltageThd", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "powerCos", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "frequence", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorAc, "status", 0) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "voltage1Rms", AcSensorData.acDecodedData.voltage1Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "voltage2Rms", AcSensorData.acDecodedData.voltage2Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "voltage3Rms", AcSensorData.acDecodedData.voltage3Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "current1Rms", AcSensorData.acDecodedData.current1Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "current2Rms", AcSensorData.acDecodedData.current2Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "current3Rms", AcSensorData.acDecodedData.current3Rms) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "pPower", AcSensorData.acDecodedData.pPower) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "qPower", AcSensorData.acDecodedData.qPower) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "sPower", AcSensorData.acDecodedData.sPower) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "pEnergy", AcSensorData.acDecodedData.pEnergy) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "qEnergy", AcSensorData.acDecodedData.qEnergy) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "currentThd", AcSensorData.acDecodedData.currentThd) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "voltageThd", AcSensorData.acDecodedData.voltageThd) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "powerCos", AcSensorData.acDecodedData.powerCos) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "frequence", AcSensorData.acDecodedData.frequence) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorAc, "status", AcSensorData.acDecodedData.status) == NULL) goto end;
 
     /*Sensor Dc1 */
     cJSON *sensorDc1 = cJSON_AddObjectToObject(data, SensorNames[1u]);

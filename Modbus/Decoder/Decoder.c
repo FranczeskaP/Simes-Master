@@ -21,8 +21,9 @@
 static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData, uint8_t channelUsed);
 static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed, MqttStruct_t mqttData[TotalNumOfDcSensorTopics]);
 static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUsed);
-static void DecodeAcModbus(void);
-static void DecodeAcMqtt(void);
+static void DecodeAcModbus(AcDecodedData_t * decodedData);
+static void DecodeAcMqtt(AcDecodedData_t * decodedData);
+static void DecodeAcNotUpdated(AcDecodedData_t * decodedData);
 static double DecodeTemperature(uint16_t tempBuffer);
 static double DecodeVoltage(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeCurrent(uint16_t currentBuffer);
@@ -33,7 +34,22 @@ static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer);
 
 void DecodeData(void)
 {
-    /* todo Decode AC) */
+    if(AcSensorData.communicationProtocol == Modbus)
+    {
+        if(AcSensorData.updated)
+        {
+            DecodeAcModbus(&AcSensorData.acDecodedData);
+        }
+        else
+        {
+            DecodeAcNotUpdated(&AcSensorData.acDecodedData);
+        }
+    }
+    else if(AcSensorData.communicationProtocol == Mqtt)
+    {
+        DecodeAcMqtt(&AcSensorData.acDecodedData);
+    }
+    
     for(uint8_t i = 0u; i < numOfDcSlaves; i++)
     {
         if(DcSensorData[i].communicationProtocol == Modbus)
@@ -51,16 +67,10 @@ void DecodeData(void)
         }
         else if(DcSensorData[i].communicationProtocol == Mqtt)
         {
-            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL, DcSensorData[i].DcSensorMqttData);
-            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_SECOND_CHANNEL, DcSensorData[i].DcSensorMqttData);
+            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_FIRST_CHANNEL, DcSensorData[i].dcSensorMqttData);
+            DecodeDcMqtt(DcSensorData[i].mqttReceivedData, &DcSensorData[i].dcDecodedDataCh1, DC_SECOND_CHANNEL, DcSensorData[i].dcSensorMqttData);
         }
     }
-}
-
-static void DecodeAc(void)
-{
-        DecodeAcModbus();
-        DecodeAcMqtt();
 }
 
 static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData, uint8_t channelUsed)
@@ -130,14 +140,64 @@ static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUse
     }
 }
 
-static void DecodeAcModbus(void)
+static void DecodeAcModbus(AcDecodedData_t * decodedData)
 {
-    /* todo */
+    decodedData->voltage1Rms = 0.f;
+    decodedData->voltage2Rms = 0.f;
+    decodedData->voltage3Rms = 0.f;
+    decodedData->current1Rms = 0.f;
+    decodedData->current2Rms = 0.f;
+    decodedData->current3Rms = 0.f;
+    decodedData->pPower = 0.f;
+    decodedData->qPower = 0.f;
+    decodedData->sPower = 0.f;
+    decodedData->pEnergy = 0.f;
+    decodedData->qEnergy = 0.f;
+    decodedData->currentThd = 0.f;
+    decodedData->voltageThd = 0.f;
+    decodedData->powerCos = 0.f;
+    decodedData->frequence = 0.f;
+    decodedData->status = 0u;
 }
 
-static void DecodeAcMqtt(void)
+static void DecodeAcMqtt(AcDecodedData_t * decodedData)
 {
-    /* todo */
+    decodedData->voltage1Rms = 0.f;
+    decodedData->voltage2Rms = 0.f;
+    decodedData->voltage3Rms = 0.f;
+    decodedData->current1Rms = 0.f;
+    decodedData->current2Rms = 0.f;
+    decodedData->current3Rms = 0.f;
+    decodedData->pPower = 0.f;
+    decodedData->qPower = 0.f;
+    decodedData->sPower = 0.f;
+    decodedData->pEnergy = 0.f;
+    decodedData->qEnergy = 0.f;
+    decodedData->currentThd = 0.f;
+    decodedData->voltageThd = 0.f;
+    decodedData->powerCos = 0.f;
+    decodedData->frequence = 0.f;
+    decodedData->status = 0u;
+}
+
+static void DecodeAcNotUpdated(AcDecodedData_t * decodedData)
+{
+    decodedData->voltage1Rms = ERROR_DOUBLE;
+    decodedData->voltage2Rms = ERROR_DOUBLE;
+    decodedData->voltage3Rms = ERROR_DOUBLE;
+    decodedData->current1Rms = ERROR_DOUBLE;
+    decodedData->current2Rms = ERROR_DOUBLE;
+    decodedData->current3Rms = ERROR_DOUBLE;
+    decodedData->pPower = ERROR_DOUBLE;
+    decodedData->qPower = ERROR_DOUBLE;
+    decodedData->sPower = ERROR_DOUBLE;
+    decodedData->pEnergy = ERROR_DOUBLE;
+    decodedData->qEnergy = ERROR_DOUBLE;
+    decodedData->currentThd = ERROR_DOUBLE;
+    decodedData->voltageThd = ERROR_DOUBLE;
+    decodedData->powerCos = ERROR_DOUBLE;
+    decodedData->frequence = ERROR_DOUBLE;
+    decodedData->status = ERROR_UINT;
 }
 
 static double DecodeTemperature(uint16_t tempBuffer)
