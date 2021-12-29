@@ -43,9 +43,9 @@ static double DecodeCurrent(uint16_t currentBuffer);
 static double DecodePower(uint16_t powerInteger, uint16_t powerDecimal);
 static double DecodeEnergy(uint16_t energyInteger, uint16_t energyDecimal);
 static uint16_t DecodeStatus(uint16_t status);
-static double DecodeQ(uint16_t qInteger, uint16_t qDecimal);
-static double DecodeNumOfCycles(uint16_t numOfCycles);
-static double DecodeChargeDegree(uint16_t chargeDegree);
+static double DecodeElectricCharge(uint16_t qInteger, uint16_t qDecimal);
+static uint16_t DecodeNumOfCycles(uint16_t numOfCycles);
+static uint16_t DecodeChargeDegree(uint16_t chargeDegree);
 static double DecodeCapacity(uint16_t capacity);
 static double DecodeInsolation(uint16_t insolation);
 static uint32_t ConvertToInt(uint32_t data, uint32_t low, uint32_t high);
@@ -100,7 +100,7 @@ static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData)
     decodedData->energyCh1 = DecodeEnergy(rxBuffer[4], rxBuffer[5]);
     decodedData->statusCh1 = DecodeStatus(rxBuffer[6]);
     decodedData->temperatureCh1 = DecodeTemperature(rxBuffer[7]);
-    decodedData->qPowerCh1 = DecodeQ(rxBuffer[8], rxBuffer[9]);
+    decodedData->electricCharge = DecodeElectricCharge(rxBuffer[8], rxBuffer[9]);
     decodedData->numOfCycles = DecodeNumOfCycles(rxBuffer[10]);
     decodedData->voltageCh2 = DecodeVoltage(rxBuffer[11]);
     decodedData->currentCh2 = DecodeCurrent(rxBuffer[12]);
@@ -146,7 +146,7 @@ static void DecodeDcNotUpdated(DcDecodedData_t * decodedData)
     decodedData->energyCh1 = ERROR_DOUBLE;
     decodedData->statusCh1 = ERROR_DOUBLE;
     decodedData->temperatureCh1 = ERROR_DOUBLE;
-    decodedData->qPowerCh1 = ERROR_DOUBLE;
+    decodedData->electricCharge = ERROR_DOUBLE;
     decodedData->numOfCycles = ERROR_DOUBLE;
     decodedData->voltageCh2 = ERROR_DOUBLE;
     decodedData->currentCh2 = ERROR_DOUBLE;
@@ -282,7 +282,7 @@ static uint16_t DecodeStatus(uint16_t status)
 }
 
 
-static double DecodeQ(uint16_t qInteger, uint16_t qDecimal)
+static double DecodeElectricCharge(uint16_t qInteger, uint16_t qDecimal)
 {
     double q = 0;
     q = (double)((qInteger & INTEGER_MASK) << 16);
@@ -296,12 +296,12 @@ static double DecodeQ(uint16_t qInteger, uint16_t qDecimal)
     return q;
 }
 
-static double DecodeNumOfCycles(uint16_t numOfCycles)
+static uint16_t DecodeNumOfCycles(uint16_t numOfCycles)
 {
     return (numOfCycles & NUM_OF_CYCLES_MASK);
 }
 
-static double DecodeChargeDegree(uint16_t chargeDegree)
+static uint16_t DecodeChargeDegree(uint16_t chargeDegree)
 {
     return (chargeDegree & CHARGE_MASK);
 }

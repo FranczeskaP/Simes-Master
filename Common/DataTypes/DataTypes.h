@@ -102,15 +102,15 @@ typedef struct
     double energyCh1;
     uint16_t statusCh1;
     double temperatureCh1;
-    double qPowerCh1;
-    double numOfCycles;
+    double electricCharge;
+    uint16_t numOfCycles;
     double voltageCh2;
     double currentCh2;
     double pPowerCh2;
     double energyCh2;
     uint16_t statusCh2;
     double temperatureCh2;
-    double chargeDegree;
+    uint16_t chargeDegree;
     double capacity;
     double insolation;
     double energy;
