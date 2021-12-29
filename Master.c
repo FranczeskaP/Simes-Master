@@ -23,10 +23,10 @@ int main()
             schedulerCalled = 0u;
             if(0u == ModubsReadData())
             {
-                ReadMqtt();
+                //ReadMqtt();
                 dataReceiveError = 0u;
                 DecodeData();
-                PerformPost(CreateStringToBePosted());
+                (void)CreateStringToBePosted();
                 // printf("%f\n", DcDecodedData[0].current1);
                 // printf("%f\n", DcDecodedData[0].current2);
                 // printf("%u\n", DcDecodedData[0].efficiency);
@@ -64,10 +64,6 @@ int main()
             printf(".\n");
         }
         sleep(1);
-        if(5u == dataReceiveError)
-        {
-            break;
-        }
     }
     return 0;
 }
@@ -80,8 +76,8 @@ static void Initiaization(void)
     signal(SIGALRM, SchedulerCalled);
     alarm(5);
     ModbusInit();
-    MqttInit();
-    InitCurl();
+    //MqttInit();
+    //InitCurl();
 }
 
 static void DeInitiaization(void)

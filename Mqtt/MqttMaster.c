@@ -61,6 +61,7 @@ static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_
 {
 	for(int i = 0; i < TotalNumOfDcSensorTopics; i++)
 	{
+		/*
 		if(0 == strcmp(DcSensorData[slave0].dcSensorMqttData[i].topic, msg->topic))
 		{
 			DcSensorData[slave0].dcSensorMqttData[i].topicUpdated = true;
@@ -90,7 +91,7 @@ static void OnMessage(struct mosquitto *mosq, void *obj, const struct mosquitto_
 			DcSensorData[slave4].dcSensorMqttData[i].topicUpdated = true;
             strcpy(DcSensorData[slave4].mqttReceivedData[i], msg->payload);
 			break;
-		}
+		}*/
 	}
 	printf("New message with topic %s: %s\n", msg->topic, (char*) msg->payload);
 }

@@ -70,73 +70,73 @@ char * CreateStringToBePosted(void)
     /*Sensor Dc1 */
     cJSON *sensorDc1 = cJSON_AddObjectToObject(data, SensorNames[1u]);
     if (sensorDc1 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "currentCh1", DcSensorData[1u].dcDecodedDataCh1.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "powerDcCh1", DcSensorData[1u].dcDecodedDataCh1.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "energyDcCh1", DcSensorData[1u].dcDecodedDataCh1.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "statusCh1", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "temperatureCh1", DcSensorData[1u].dcDecodedDataCh1.temperature) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh2", DcSensorData[1u].dcDecodedDataCh2.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "currentCh2", DcSensorData[1u].dcDecodedDataCh2.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "powerDcCh2", DcSensorData[1u].dcDecodedDataCh2.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "energyDcCh2", DcSensorData[1u].dcDecodedDataCh2.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "statusCh2", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc1, "temperatureCh2", DcSensorData[1u].dcDecodedDataCh2.temperature) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh1", DcSensorData[1u].dcDecodedData.voltageCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "currentCh1", DcSensorData[1u].dcDecodedData.currentCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "powerDcCh1", DcSensorData[1u].dcDecodedData.pPowerCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "energyDcCh1", DcSensorData[1u].dcDecodedData.energyCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "statusCh1", DcSensorData[1u].dcDecodedData.statusCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "temperatureCh1", DcSensorData[1u].dcDecodedData.temperatureCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "voltageCh2", DcSensorData[1u].dcDecodedData.voltageCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "currentCh2", DcSensorData[1u].dcDecodedData.currentCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "powerDcCh2", DcSensorData[1u].dcDecodedData.pPowerCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "energyDcCh2", DcSensorData[1u].dcDecodedData.energyCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "statusCh2", DcSensorData[1u].dcDecodedData.statusCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc1, "temperatureCh2", DcSensorData[1u].dcDecodedData.temperatureCh2) == NULL) goto end;
 
     /*Sensor Dc2 */
     cJSON *sensorDc2 = cJSON_AddObjectToObject(data, SensorNames[2u]);
     if (sensorDc2 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "currentCh1", DcSensorData[2u].dcDecodedDataCh1.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "powerDcCh1", DcSensorData[2u].dcDecodedDataCh1.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "energyDcCh1", DcSensorData[2u].dcDecodedDataCh1.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "statusCh1", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "temperatureCh1", DcSensorData[2u].dcDecodedDataCh1.temperature) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh2", DcSensorData[2u].dcDecodedDataCh2.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "currentCh2", DcSensorData[2u].dcDecodedDataCh2.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "powerDcCh2", DcSensorData[2u].dcDecodedDataCh2.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "energyDcCh2", DcSensorData[2u].dcDecodedDataCh2.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "statusCh2", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "temperatureCh2", DcSensorData[2u].dcDecodedDataCh2.temperature) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc2, "lighting", 0) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh1", DcSensorData[1u].dcDecodedData.voltageCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "currentCh1", DcSensorData[2u].dcDecodedData.currentCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "powerDcCh1", DcSensorData[2u].dcDecodedData.pPowerCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "energyDcCh1", DcSensorData[2u].dcDecodedData.energyCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "statusCh1", DcSensorData[2u].dcDecodedData.statusCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "temperatureCh1", DcSensorData[2u].dcDecodedData.temperatureCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "voltageCh2", DcSensorData[2u].dcDecodedData.voltageCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "currentCh2", DcSensorData[2u].dcDecodedData.currentCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "powerDcCh2", DcSensorData[2u].dcDecodedData.pPowerCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "energyDcCh2", DcSensorData[2u].dcDecodedData.energyCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "statusCh2", DcSensorData[2u].dcDecodedData.statusCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "temperatureCh2", DcSensorData[2u].dcDecodedData.temperatureCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc2, "lighting", DcSensorData[2u].dcDecodedData.insolation) == NULL) goto end;
 
     /*Sensor Dc3 */
     cJSON *sensorDc3 = cJSON_AddObjectToObject(data, SensorNames[3u]);
     if (sensorDc3 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "currentCh1", DcSensorData[3u].dcDecodedDataCh1.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "powerDcCh1", DcSensorData[3u].dcDecodedDataCh1.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "energyDcCh1", DcSensorData[3u].dcDecodedDataCh1.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "statusCh1", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "temperatureCh1", DcSensorData[3u].dcDecodedDataCh1.temperature) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh1", DcSensorData[1u].dcDecodedData.voltageCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "currentCh1", DcSensorData[3u].dcDecodedData.currentCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "powerDcCh1", DcSensorData[3u].dcDecodedData.pPowerCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "energyDcCh1", DcSensorData[3u].dcDecodedData.energyCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "statusCh1", DcSensorData[3u].dcDecodedData.statusCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "temperatureCh1", DcSensorData[3u].dcDecodedData.temperatureCh1) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "charge", 0) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "cycles", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh2", DcSensorData[3u].dcDecodedDataCh2.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "currentCh2", DcSensorData[3u].dcDecodedDataCh2.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "powerDcCh2", DcSensorData[3u].dcDecodedDataCh2.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "energyDcCh2", DcSensorData[3u].dcDecodedDataCh2.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "statusSoh", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc3, "temperatureCh2", DcSensorData[3u].dcDecodedDataCh2.temperature) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "voltageCh2", DcSensorData[3u].dcDecodedData.voltageCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "currentCh2", DcSensorData[3u].dcDecodedData.currentCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "powerDcCh2", DcSensorData[3u].dcDecodedData.pPowerCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "energyDcCh2", DcSensorData[3u].dcDecodedData.energyCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "statusSoh", DcSensorData[3u].dcDecodedData.statusCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc3, "temperatureCh2", DcSensorData[3u].dcDecodedData.temperatureCh2) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "soc", 0) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc3, "capacity", 0) == NULL) goto end;
 
     /*Sensor Dc4 */
     cJSON *sensorDc4 = cJSON_AddObjectToObject(data, SensorNames[4u]);
     if (sensorDc4 == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh1", DcSensorData[1u].dcDecodedDataCh1.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "currentCh1", DcSensorData[4u].dcDecodedDataCh1.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "powerDcCh1", DcSensorData[4u].dcDecodedDataCh1.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "energyDcCh1", DcSensorData[4u].dcDecodedDataCh1.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "statusCh1", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "temperatureCh1", DcSensorData[4u].dcDecodedDataCh1.temperature) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh1", DcSensorData[1u].dcDecodedData.voltageCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "currentCh1", DcSensorData[4u].dcDecodedData.currentCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "powerDcCh1", DcSensorData[4u].dcDecodedData.pPowerCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "energyDcCh1", DcSensorData[4u].dcDecodedData.energyCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "statusCh1", DcSensorData[4u].dcDecodedData.statusCh1) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "temperatureCh1", DcSensorData[4u].dcDecodedData.temperatureCh1) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "charge", 0) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "cycles", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh2", DcSensorData[4u].dcDecodedDataCh2.voltage) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "currentCh2", DcSensorData[4u].dcDecodedDataCh2.current) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "powerDcCh2", DcSensorData[4u].dcDecodedDataCh2.power) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "energyDcCh2", DcSensorData[4u].dcDecodedDataCh2.energy) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "statusSoh", 0) == NULL) goto end;
-    if (cJSON_AddNumberToObject(sensorDc4, "temperatureCh2", DcSensorData[4u].dcDecodedDataCh2.temperature) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "voltageCh2", DcSensorData[4u].dcDecodedData.voltageCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "currentCh2", DcSensorData[4u].dcDecodedData.currentCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "powerDcCh2", DcSensorData[4u].dcDecodedData.pPowerCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "energyDcCh2", DcSensorData[4u].dcDecodedData.energyCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "statusSoh", DcSensorData[4u].dcDecodedData.statusCh2) == NULL) goto end;
+    if (cJSON_AddNumberToObject(sensorDc4, "temperatureCh2", DcSensorData[4u].dcDecodedData.temperatureCh2) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "soc", 0) == NULL) goto end;
     if (cJSON_AddNumberToObject(sensorDc4, "capacity", 0) == NULL) goto end;
 
@@ -160,6 +160,7 @@ char * CreateStringToBePosted(void)
     if (cJSON_AddNumberToObject(sensorDc5, "capacity", 0) == NULL) goto end;
 
     char *string = cJSON_Print(data);
+    printf("%s", string);
     if (string == NULL)
     {
         fprintf(stderr, "Failed to print data.\n");

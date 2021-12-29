@@ -19,6 +19,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         .allTopicsUpdated = false,
         .updated = false
     },
+    /*
     [slave1] = {
         .dcSensorMqttData = {
         [Ch1] = {"DeviceNo2/Ch1", false},
@@ -90,7 +91,7 @@ DcSensorData_t DcSensorData[numOfDcSlaves] = {
         }, 
         .allTopicsUpdated = false,
         .updated = false
-    }
+    }*/
 };
 
 AcSensorData_t AcSensorData = {

@@ -14,7 +14,6 @@ typedef enum
     slave1 = 1u,
     slave2 = 2u,
     slave3 = 3u,
-    slave4 = 4u,
     numOfDcSlaves
 }DcSlaves;
 
@@ -97,12 +96,23 @@ typedef enum
 
 typedef struct
 {
-    double temperature;
-    double voltage;
-    double current;
-    double power;
-    uint16_t efficiency;
-    double electricCharge;
+    double voltageCh1;
+    double currentCh1;
+    double pPowerCh1;
+    double energyCh1;
+    uint16_t statusCh1;
+    double temperatureCh1;
+    double qPowerCh1;
+    double numOfCycles;
+    double voltageCh2;
+    double currentCh2;
+    double pPowerCh2;
+    double energyCh2;
+    uint16_t statusCh2;
+    double temperatureCh2;
+    double chargeDegree;
+    double capacity;
+    double insolation;
     double energy;
 }DcDecodedData_t;
 
@@ -148,8 +158,7 @@ typedef struct
     bool allTopicsUpdated;
     modbus_t *slave;
     uint16_t modbusReceivedData[18];
-    DcDecodedData_t dcDecodedDataCh1;
-    DcDecodedData_t dcDecodedDataCh2;
+    DcDecodedData_t dcDecodedData;
     bool updated;
 }DcSensorData_t;
 

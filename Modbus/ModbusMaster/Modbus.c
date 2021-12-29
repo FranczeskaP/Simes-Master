@@ -58,10 +58,11 @@ uint8_t ModubsReadData(void)
             DcSensorData[i].updated = !DcSensorData[i].updated;
         }
     }
+    /*
     AcSensorData.updated = modbusReadAc();
     error |= AcSensorData.updated;
     AcSensorData.updated = !AcSensorData.updated;
-
+    */
     return error;
 }
 
