@@ -35,6 +35,7 @@ target_include_directories(Master
     Mqtt)
 
 target_link_libraries(Master 
+    m #math lib
     ${MODBUS_LIBRARIES}
     ${MQTT_LIBRARIES}
     ${CURL_LIBRARIES})

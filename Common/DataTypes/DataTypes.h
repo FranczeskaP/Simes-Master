@@ -126,6 +126,13 @@ typedef struct
     uint16_t status;
 }AcDecodedData_t;
 
+typedef struct
+{
+    uint16_t startAddr;
+    uint16_t numOfReg;
+    uint16_t buffer[16u];
+}AcModbusData_t;
+
 extern MqttStruct_t DcSensor1[TotalNumOfDcSensorTopics];
 extern MqttStruct_t DcSensor2[TotalNumOfDcSensorTopics];
 extern MqttStruct_t DcSensor3[TotalNumOfDcSensorTopics];
@@ -154,7 +161,10 @@ typedef struct
 	char * mqttReceivedData[TotalNumOfZamelTopics];
     bool allTopicsUpdated;
     modbus_t *slave;
-    uint16_t modbusReceivedData[18];
+    AcModbusData_t modbbusData1;
+    AcModbusData_t modbbusData2;
+    AcModbusData_t modbbusData3;
+    AcModbusData_t modbbusData4;
     AcDecodedData_t acDecodedData;
     bool updated;
 }AcSensorData_t;

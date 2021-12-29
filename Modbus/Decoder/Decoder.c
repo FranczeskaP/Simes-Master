@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 #include "Decoder.h"
 #include "DataTypes.h"
 
@@ -18,6 +19,18 @@
 #define ERROR_DOUBLE            (255.f)
 #define ERROR_UINT              (255u)
 
+typedef union {
+
+	float f;
+	struct
+	{
+		uint32_t mantissa : 23;
+		uint32_t exponent : 8;
+		uint32_t sign : 1;
+
+	} raw;
+} decodedAc_t;
+
 static void DecodeDcModbus(uint16_t *rxBuffer, DcDecodedData_t * decodedData, uint8_t channelUsed);
 static void DecodeDcMqtt(char *rxBuffer[TotalNumOfDcSensorTopics], DcDecodedData_t * decodedData, uint8_t channelUsed, MqttStruct_t mqttData[TotalNumOfDcSensorTopics]);
 static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUsed);
@@ -31,6 +44,8 @@ static double DecodePower(uint16_t powerBuffer);
 static uint16_t DecodeEfficiency(uint16_t efficiencyBuffer);
 static double DecodeElectricCharge(uint16_t integerBuffer, uint16_t decimalBuffer);
 static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer);
+static uint32_t ConvertToInt(uint32_t data, uint32_t low, uint32_t high);
+static float DecodeAc(uint16_t high, uint16_t low);
 
 void DecodeData(void)
 {
@@ -142,21 +157,21 @@ static void DecodeDcNotUpdated(DcDecodedData_t * decodedData, uint8_t channelUse
 
 static void DecodeAcModbus(AcDecodedData_t * decodedData)
 {
-    decodedData->voltage1Rms = 0.f;
-    decodedData->voltage2Rms = 0.f;
-    decodedData->voltage3Rms = 0.f;
-    decodedData->current1Rms = 0.f;
-    decodedData->current2Rms = 0.f;
-    decodedData->current3Rms = 0.f;
-    decodedData->pPower = 0.f;
-    decodedData->qPower = 0.f;
-    decodedData->sPower = 0.f;
-    decodedData->pEnergy = 0.f;
-    decodedData->qEnergy = 0.f;
-    decodedData->currentThd = 0.f;
-    decodedData->voltageThd = 0.f;
-    decodedData->powerCos = 0.f;
-    decodedData->frequence = 0.f;
+    decodedData->voltage1Rms = DecodeAc(AcSensorData.modbbusData1.buffer[0], AcSensorData.modbbusData1.buffer[1]);
+    decodedData->voltage2Rms = DecodeAc(AcSensorData.modbbusData1.buffer[2], AcSensorData.modbbusData1.buffer[3]);
+    decodedData->voltage3Rms = DecodeAc(AcSensorData.modbbusData1.buffer[4], AcSensorData.modbbusData1.buffer[5]);
+    decodedData->current1Rms = DecodeAc(AcSensorData.modbbusData1.buffer[6], AcSensorData.modbbusData1.buffer[7]);
+    decodedData->current2Rms = DecodeAc(AcSensorData.modbbusData1.buffer[8], AcSensorData.modbbusData1.buffer[9]);
+    decodedData->current3Rms = DecodeAc(AcSensorData.modbbusData1.buffer[10], AcSensorData.modbbusData1.buffer[11]);
+    decodedData->pPower = DecodeAc(AcSensorData.modbbusData2.buffer[0], AcSensorData.modbbusData2.buffer[1]);
+    decodedData->qPower = DecodeAc(AcSensorData.modbbusData2.buffer[4], AcSensorData.modbbusData2.buffer[5]);
+    decodedData->sPower = DecodeAc(AcSensorData.modbbusData2.buffer[2], AcSensorData.modbbusData2.buffer[3]);
+    decodedData->pEnergy = DecodeAc(AcSensorData.modbbusData2.buffer[12], AcSensorData.modbbusData2.buffer[13]);
+    decodedData->qEnergy = DecodeAc(AcSensorData.modbbusData4.buffer[0], AcSensorData.modbbusData4.buffer[1]);
+    decodedData->currentThd = DecodeAc(AcSensorData.modbbusData3.buffer[2], AcSensorData.modbbusData3.buffer[3]);
+    decodedData->voltageThd = DecodeAc(AcSensorData.modbbusData3.buffer[0], AcSensorData.modbbusData3.buffer[1]);
+    decodedData->powerCos = DecodeAc(AcSensorData.modbbusData2.buffer[6], AcSensorData.modbbusData2.buffer[7]);
+    decodedData->frequence = DecodeAc(AcSensorData.modbbusData2.buffer[10], AcSensorData.modbbusData2.buffer[11]);
     decodedData->status = 0u;
 }
 
@@ -290,3 +305,25 @@ static double DecodeEnergy(uint16_t integerBuffer, uint16_t decimalBuffer)
     energy += energyDecimal_d;
     return energy;
 }
+
+static uint32_t ConvertToInt(uint32_t data, uint32_t low, uint32_t high)
+{
+	uint32_t f = 0, i;
+	for (i = high; i >= low; i--) {
+		f = f + ((data >> i) & 0x1) * pow(2, high - i);
+	}
+	return f;
+}
+
+static float DecodeAc(uint16_t high, uint16_t low)
+{
+    decodedAc_t var;
+    uint32_t x = (high << 16) | low;
+	uint32_t f = ConvertToInt(x, 9, 31);
+	var.raw.mantissa = f;
+	f = ConvertToInt(x, 1, 8);
+	var.raw.exponent = f;
+	var.raw.sign = ((x >> 31) & 0x01u);
+    return var.f;
+}
+

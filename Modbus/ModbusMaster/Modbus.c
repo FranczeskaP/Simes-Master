@@ -42,7 +42,8 @@ void ModbusDeInit(void)
         modbus_close(DcSensorData[i].slave);
         modbus_free(DcSensorData[i].slave);
     }
-    /* todo AC sensor de init */
+    modbus_close(AcSensorData.slave);
+    modbus_free(AcSensorData.slave);
 }
 
 uint8_t ModubsReadData(void)
@@ -57,7 +58,9 @@ uint8_t ModubsReadData(void)
             DcSensorData[i].updated = !DcSensorData[i].updated;
         }
     }
-/* todo add AC Read */
+    AcSensorData.updated = modbusReadAc();
+    error |= AcSensorData.updated;
+    AcSensorData.updated = !AcSensorData.updated;
 
     return error;
 }
@@ -76,13 +79,33 @@ static uint8_t modbusReadDc(uint16_t slaveNum)
     return error;
 }
 
-/* todo update */
 static uint8_t modbusReadAc(void)
 {
     uint8_t error = 0u;
-    /* Kod 0x03u */
-    int numOfReadRegs = modbus_read_registers(modbusSensors.acSensor.slave, 0u, NUM_OF_AC_REGISTERS, modbusSensors.acSensor.receivedData);
-    if (numOfReadRegs != NUM_OF_AC_REGISTERS) 
+    /* Kod 0x04u */
+    int numOfReadRegs = modbus_read_input_registers(modbusSensors.acSensor.slave, AcSensorData.modbbusData1.startAddr, AcSensorData.modbbusData1.numOfReg, AcSensorData.modbbusData1.buffer);
+    if (numOfReadRegs != AcSensorData.modbbusData1.numOfReg) 
+    {
+        error = 1u;
+        fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
+    }
+    nanosleep(&WaitTimeModbus, &WaitTimeModbus);
+    numOfReadRegs = modbus_read_input_registers(modbusSensors.acSensor.slave, AcSensorData.modbbusData2.startAddr, AcSensorData.modbbusData2.numOfReg, AcSensorData.modbbusData2.buffer);
+    if (numOfReadRegs != AcSensorData.modbbusData2.numOfReg) 
+    {
+        error = 1u;
+        fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
+    }
+    nanosleep(&WaitTimeModbus, &WaitTimeModbus);
+    numOfReadRegs = modbus_read_input_registers(modbusSensors.acSensor.slave, AcSensorData.modbbusData3.startAddr, AcSensorData.modbbusData3.numOfReg, AcSensorData.modbbusData3.buffer);
+    if (numOfReadRegs != AcSensorData.modbbusData3.numOfReg) 
+    {
+        error = 1u;
+        fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
+    }
+    nanosleep(&WaitTimeModbus, &WaitTimeModbus);
+    numOfReadRegs = modbus_read_input_registers(modbusSensors.acSensor.slave, AcSensorData.modbbusData4.startAddr, AcSensorData.modbbusData4.numOfReg, AcSensorData.modbbusData4.buffer);
+    if (numOfReadRegs != AcSensorData.modbbusData4.numOfReg) 
     {
         error = 1u;
         fprintf(stderr, "Failed to read: %s\n", modbus_strerror(errno));
@@ -113,7 +136,6 @@ static void initDcModbus(void)
     }
 }
 
-/* todo update */
 static void initAcModbus(void)
 {
     modbusSensors.acSensor.slave = modbus_new_rtu(DEVICE_NAME, BAUDRATE, PARITY, DATA_BITS, STOP_BITS);
